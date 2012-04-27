@@ -1,0 +1,12 @@
+*~
+*.o
+*.Debug
+*.Release
+*.png
+*.log
+*.pro.user
+ui_*
+tmp/
+debug/
+release/
+Makefile
