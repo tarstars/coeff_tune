@@ -8,5 +8,5 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += piezo_tensor.h util.h
-SOURCES += main.cpp piezo_tensor.cpp util.cpp
+HEADERS += piezo_tensor.h util.h material_tensor.h
+SOURCES += main.cpp piezo_tensor.cpp material_tensor.cpp util.cpp
