@@ -3,6 +3,8 @@
 
 class PiezoTensor;
 class MaterialTensor;
+class Mat3;
+class Vec3;
 
 PiezoTensor makePiezoTensor(double e15, double e22, double e31, double e33);
 MaterialTensor makeMaterialTensor(double c11,
@@ -12,5 +14,12 @@ MaterialTensor makeMaterialTensor(double c11,
 				  double c33,
 				  double c44,
 				  double c66);
+
+Mat3 makePiezoChristoffel(const PiezoTensor&, 
+			  const MaterialTensor&, 
+			  const Vec3&,
+			  double, 
+			  double);
+
 
 #endif

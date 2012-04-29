@@ -1,6 +1,8 @@
 #include "util.h"
 #include "piezo_tensor.h"
 #include "material_tensor.h"
+#include "mat3.h"
+#include "vec3.h"
 
 PiezoTensor 
 makePiezoTensor(double e15, double e21, double e31, double e33){
@@ -57,4 +59,17 @@ MaterialTensor makeMaterialTensor(double c11,
 	}
 
   return r;
+}
+
+Mat3 
+makePiezoChristoffel(const PiezoTensor& pt, 
+		     const MaterialTensor& mt, 
+		     const Vec3& n,
+		     double exx, 
+		     double ezz){
+  Mat3 ret;
+
+  
+
+  return ret;
 }
