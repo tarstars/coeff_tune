@@ -69,7 +69,13 @@ makePiezoChristoffel(const PiezoTensor& pt,
 		     double ezz){
   Mat3 ret;
 
-  
+  for(int p = 0; p < 3; ++p)
+    for(int q = 0; q < 3; ++q){
+      ret(p,q) = 0;
+      for(int r = 0; r < 3; ++r)
+	for(int s = 0; s < 3; ++s)
+	  ret(p, q) += mt(p, r, q, s) * n[r] * n[s];
+    }
 
   return ret;
 }

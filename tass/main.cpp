@@ -3,6 +3,7 @@
 #include "mat3.h"
 #include "material_tensor.h"
 #include "piezo_tensor.h"
+#include "poly3.h"
 #include "util.h"
 #include "vec3.h"
 
@@ -21,8 +22,10 @@ int main(){
   Vec3 n(0, 0, 1);
 
   Mat3 christ = makePiezoChristoffel(pt, mt, n, exx, ezz);
+  Poly3 christPoly = christ.getPoly();
 
-  cout << "piezo tensor: " << pt << endl;
-  cout << "materian tensor: " << mt << endl;
-  cout << "christoffel matrix: " << christ << endl;
+  cout << "piezo tensor: " << endl << pt << endl;
+  cout << "materian tensor: " << endl << mt << endl;
+  cout << "christoffel matrix: " << endl << christ << endl;
+  cout << "polynome " << christPoly << endl;
 }
