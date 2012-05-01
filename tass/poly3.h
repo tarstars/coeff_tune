@@ -8,6 +8,7 @@ class Poly3 {
  public:
 
   Poly3(double c3, double c2, double c1, double c0);
+  void solve(double* g1, double* g2, double * g3)const;
 
   friend std::ostream& operator<<(std::ostream&, const Poly3&);
 };
