@@ -45,9 +45,10 @@ makeMaterialTensor(double c11, double c12, double c13, double c14, double c33, d
 Matrix3 
 makeEpsilonTensor(double eps11, double eps33){
   Matrix3 ret;
-  double epstc[3][3] = {{eps11, 0, 0}, 
-			{0, eps11, 0}, 
-			{0, 0, eps33}};
+  double eps0 = 8.8542e-12;
+  double epstc[3][3] = {{eps0*eps11, 0, 0}, 
+			{0, eps0*eps11, 0}, 
+			{0, 0, eps0*eps33}};
 
   for(int p=0; p<3; ++p)
     for(int q=0; q<3; ++q)
@@ -68,8 +69,34 @@ makeWaveVector(double x, double y, double z){
 }
 
 Matrix3
-makePiezoChristoffel(const MaterialTensor& mtens, const PiezoTensor& ptens, const Matrix3& etens, const Vector3& n){
+makePiezoChristoffel(const MaterialTensor& mtens, 
+		     const PiezoTensor& ptens, 
+		     const Matrix3& etens, 
+		     const Vector3& n){
   Matrix3 ret;
+  
+  double eps = 0;
+  for(int p = 0; p < 3; ++p)
+    eps += etens(p, p) * n(p) * n(p);
+
+  for (int p = 0; p < 3; ++p){
+    for(int s = 0; s < 3; ++s){
+  
+      double gamma_ps = 0; //Main christoffel
+      double gamma_p = 0;  //Piezo part 1
+      double gamma_s = 0;  //Piezo part 2
+      
+      for(int q = 0; q < 3; ++q){
+	for(int r = 0; r < 3; ++r){
+	  gamma_ps += mtens(p, q, r, s) * n(q) * n(r);
+	  gamma_p += ptens(q, p, r) * n(q) * n(r);
+	  gamma_s += ptens(q, s, r) * n(q) * n(r);
+	}
+      }
+      ret(p, s) = gamma_ps + gamma_p * gamma_s / eps; 
+    }
+  }
+  
   return ret;
 }
 
