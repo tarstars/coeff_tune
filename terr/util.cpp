@@ -60,6 +60,12 @@ makeEpsilonTensor(double eps11, double eps33){
 Vector3 
 makeWaveVector(double x, double y, double z){
   Vector3 ret;
+  if (x < 1e-12)
+    x = 0;
+  if (y < 1e-12)
+    y = 0;
+  if (z < 1e-12)
+    z = 0;
   double wv[3] ={x, y, z};
 
   for(int p=0; p<3; ++p)
@@ -75,6 +81,8 @@ makePiezoChristoffel(const MaterialTensor& mtens,
 		     const Vector3& n){
   Matrix3 ret;
   
+  //GG_ps = G_ps + g_p*g_s/eps
+
   double eps = 0;
   for(int p = 0; p < 3; ++p)
     eps += etens(p, p) * n(p) * n(p);
