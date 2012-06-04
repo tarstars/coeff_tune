@@ -2,6 +2,7 @@
 //#include "Nvalue.h"
 #include "Ntensor.h"
 #include "Utils.h"
+#include "PovrayMaker.h"
 
 double* convD(double data0[])
 {
@@ -78,7 +79,7 @@ int main()
 	Nmatrix Permit=makePermitTensor2(1,2);
 	Permit.show();
 
-	Nvector Direction=makeDirection3(1,2,3);
+	Nvector Direction=makeDirection3D(1,2,3);
 	Direction.show();
 
 	Ntensor ji=Piezo.mult(Direction,2).mult(Direction,0);
@@ -92,6 +93,51 @@ int main()
 	velocities.show();
 	solve3(2,1.1,0).show();
 
+
+	PovrayMaker pm1(QString("Velocity1"));
+	PovrayMaker pm2(QString("Velocity2"));
+	PovrayMaker pm3(QString("Velocity3"));
+	int nsamp=4;
+	double Pi=3.1415926535897932384626433832795;
+	double step=2*Pi/nsamp;
+	for(int k=1;k<nsamp/2;k++)
+		for(int j=0;j<nsamp;j++)
+		{
+			Direction=makeDirection3S(1,step*j,step*k);
+			ji=Piezo.mult(Direction,2).mult(Direction,0);
+			Christofel=Elastic.mult(Direction,2).mult(Direction,1)+ji.extm(ji)/(Permit.mult(Direction,1).mult(Direction,0));
+			velocities=eigval3(Christofel);
+	//		pm.addSphere(Direction.data,1);
+			pm1.addRadial(velocities(1),step*j,step*k,1);
+			pm2.addRadial(velocities(2),step*j,step*k,2);
+			pm3.addRadial(velocities(3),step*j,step*k,3);
+		}
+	{
+		Direction=makeDirection3S(1,0,0);
+		ji=Piezo.mult(Direction,2).mult(Direction,0);
+		Christofel=Elastic.mult(Direction,2).mult(Direction,1)+ji.extm(ji)/(Permit.mult(Direction,1).mult(Direction,0));
+		velocities=eigval3(Christofel);
+//		pm.addSphere(Direction.data,1);
+		pm1.addRadial(velocities(1),0,0,1);
+		pm2.addRadial(velocities(2),0,0,2);
+		pm3.addRadial(velocities(3),0,0,3);
+	}
+	{
+		Direction=makeDirection3S(1,0,Pi);
+		ji=Piezo.mult(Direction,2).mult(Direction,0);
+		Christofel=Elastic.mult(Direction,2).mult(Direction,1)+ji.extm(ji)/(Permit.mult(Direction,1).mult(Direction,0));
+		velocities=eigval3(Christofel);
+//		pm.addSphere(Direction.data,1);
+		pm1.addRadial(velocities(1),0,Pi,1);
+		pm2.addRadial(velocities(2),0,Pi,2);
+		pm3.addRadial(velocities(3),0,Pi,3);
+	}
+
+	pm1.codeLine(QString("//aaaaaaaaa!"));
+	pm1.filmINI(4);
+	pm1.render();
+//	pm2.render();
+//	pm3.render();
 	printf("end of line\n");
 		}
 

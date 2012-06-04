@@ -46,7 +46,7 @@ void PovrayMaker::init()
 		<<QString("}")<<"\n"
 		<<"\n";
 
-	addLightSource(2, 4, -3);
+	addLightSource(2, -3, 4);
 
 	addCylinder(0, 0,0,2, 0,0, 0.05,1);
 	addCylinder(0, 0,0,0, 2,0, 0.05,2);
@@ -97,7 +97,7 @@ void PovrayMaker::addSphere(double x, double y,double z, double r, double c)
 	textOut
 		<<QString("sphere")<<"\n"
 		<<QString("{")<<"\n"
-		<<QString("  <%1, %2, %3>, %4").arg(x).arg(y).arg(-z).arg(r)<<"\n";
+		<<QString("  <%1, %2, %3>, %4").arg(x).arg(z).arg(y).arg(r)<<"\n";
 	if(c)
 		pigment(c);
 
@@ -127,8 +127,8 @@ void PovrayMaker::addCone(double x, double y,double z,double r,double x1, double
 	textOut
 		<<QString("cone")<<"\n"
 		<<QString("{")<<"\n"
-		<<QString("  <%1, %2, %3>, %4").arg(x).arg(y).arg(-z).arg(r)<<"\n"
-		<<QString("  <%1, %2, %3>, %4").arg(x1).arg(y1).arg(-z1).arg(r1)<<"\n";
+		<<QString("  <%1, %2, %3>, %4").arg(x).arg(z).arg(y).arg(r)<<"\n"
+		<<QString("  <%1, %2, %3>, %4").arg(x1).arg(z1).arg(y1).arg(r1)<<"\n";
 	if(open)
   		textOut<<QString("  %1").arg(open)<<"\n";           // Remove end caps
 	if(c)
@@ -152,7 +152,7 @@ void PovrayMaker::addLightSource(double x, double y,double z, double c)
 {
 	double R=1,G=1,B=1;
 	textOut
-		<<QString("light_source { <%1, %2, %3> color rgb <%4, %5, %6>}").arg(x).arg(y).arg(-z).arg(R).arg(G).arg(B)<<"\n"
+		<<QString("light_source { <%1, %2, %3> color rgb <%4, %5, %6>}").arg(x).arg(z).arg(y).arg(R).arg(G).arg(B)<<"\n"
 		<<"\n";
 
 }

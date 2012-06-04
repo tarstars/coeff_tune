@@ -15,7 +15,8 @@ Ntensor3 makePiezoTensor5(double e31,double e32,double e33,double e21,double e15
 Nmatrix makePermitTensor6(double mat []);
 Nmatrix makePermitTensor2(double eo,double ee);
 
-Nvector makeDirection3(double n1,double n2,double n3);
+Nvector makeDirection3D(double n1,double n2,double n3);
+Nvector makeDirection3S(double rho,double phi, double theta);
 
 Nvector solve3(double a,double b,double c);
 Nvector eigval3(Nmatrix mat);

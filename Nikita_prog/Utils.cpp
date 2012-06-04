@@ -67,7 +67,7 @@ Nmatrix makePermitTensor2(double eo,double ee)
 
 
 
-Nvector makeDirection3(double n1,double n2,double n3)
+Nvector makeDirection3D(double n1,double n2,double n3)
 {
 	Nvector nret(3,0);
 	nret(1)=n1;
@@ -75,6 +75,16 @@ Nvector makeDirection3(double n1,double n2,double n3)
 	nret(3)=n3;
 	return nret;
 }
+
+Nvector makeDirection3S(double rho,double phi, double theta)
+{
+	Nvector nret(3,0);
+	nret(1)=rho*cos(phi)*sin(theta);
+	nret(2)=rho*sin(phi)*sin(theta);
+	nret(3)=rho*cos(theta);
+	return nret;
+}
+
 
 Nvector solve3(double a,double b,double c)
 {

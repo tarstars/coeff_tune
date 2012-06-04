@@ -36,10 +36,10 @@ public:
 
 	friend std::ostream & operator <<(std::ostream &os,Ntensor t);
 
-	Ntensor operator +(Ntensor & ten);
-	Ntensor operator -(Ntensor & ten);
-	Ntensor operator *(Ntensor & ten);
-	Ntensor operator /(Ntensor & ten);
+	Ntensor operator +(const Ntensor & ten) const;
+	Ntensor operator -(const Ntensor & ten) const;
+	Ntensor operator *(const Ntensor & ten) const;
+	Ntensor operator /(const Ntensor & ten) const;
 	Ntensor mult(Ntensor & ten,int ind1=-1,int ind2=0);
 	Ntensor extm(Ntensor & ten);
 	double & el(int ind);
