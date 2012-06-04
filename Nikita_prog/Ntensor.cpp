@@ -118,7 +118,7 @@ std::ostream & operator <<(std::ostream &os, Ntensor t)
 
 }
 
-Ntensor Ntensor::operator +(Ntensor & ten)
+Ntensor Ntensor::operator +(const Ntensor & ten) const
 {
 	if(ndim==ten.ndim && nels==ten.nels)
 	{
@@ -132,7 +132,7 @@ Ntensor Ntensor::operator +(Ntensor & ten)
 	else
 		return Ntensor();
 }
-Ntensor Ntensor::operator -(Ntensor & ten)
+Ntensor Ntensor::operator -(const Ntensor & ten) const
 {
 	double *nData=new double[nels];
 	int *nDims=new int[ndim];
@@ -141,7 +141,7 @@ Ntensor Ntensor::operator -(Ntensor & ten)
 
 	return Ntensor(ndim,nDims,nData);
 }
-Ntensor Ntensor::operator *(Ntensor & ten)
+Ntensor Ntensor::operator *(const Ntensor & ten) const
 {
 	if(ndim==ten.ndim && nels==ten.nels)
 	{
@@ -162,7 +162,7 @@ Ntensor Ntensor::operator *(Ntensor & ten)
 	else
 		return Ntensor();
 }
-Ntensor Ntensor::operator /(Ntensor & ten)
+Ntensor Ntensor::operator /(const Ntensor & ten) const
 {
 	if(ndim==ten.ndim && nels==ten.nels)
 	{
