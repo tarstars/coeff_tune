@@ -72,32 +72,42 @@ int main()
 	printf("++++++++++++ The Programm ++++++++++++\n");
 
 //	Ntensor4 Elastic=makeElasticTensor8(1,2,3,4,5,6,7,8);
-	Ntensor4 Elastic=makeElasticTensor8(19.886e10, 5.467e10, 6.799e10, 0.783e10,19.886e10,-0.783e10, 23.418e10, 5.985e10);
+	Ntensor4 Elastic=makeElasticTensor8(19.886e10, 5.467e10, 6.799e10, 0.783e10,19.886e10,6.799e10, 23.418e10, 5.985e10);
+	printf("Elastic\n");
 	Elastic.show6();
 
 //	Ntensor3 Piezo=makePiezoTensor5(1,2,3,4,5);
 	Ntensor3 Piezo=makePiezoTensor5(3.655, 2.407, 0.328, 0.328, 1.894);
+	printf("Piezo\n");
 	Piezo.show6();
 	Piezo.show();
 
 //	Nmatrix Permit=makePermitTensor2(1,2);
 	Nmatrix Permit=makePermitTensor2(44.9,26.7);
+	printf("Permittivity\n");
 	Permit.show();
 
 	double epsilon0=8.8542e-12;
 
-	Nvector Direction=makeDirection3D(1,0,0);
+	Nvector Direction=makeDirection3D(0,0,1);
+	printf("Direction\n");
 	Direction.show();
 
 	Ntensor ji=Piezo.mult(Direction,2).mult(Direction,0);
+	printf("ij\n");
 	ji.show();
 
 	Nmatrix Christofel=Elastic.mult(Direction,2).mult(Direction,1)+ji.extm(ji)/(Permit.mult(Direction,1).mult(Direction,0))/epsilon0;
+	printf("Christofel\n");
 	Christofel.show();
 
 
 	Nvector velocities=eigval3(Christofel);
+	printf("velocities\n");
 	velocities.show();
+	printf("velocities: %lf, %lf, %lf\n",sqrt(velocities(1)/4642.8),sqrt(velocities(2)/4642.8),sqrt(velocities(3)/4642.8));
+	Nvector velocities2=sqrt(eigval3(Christofel)/4642.8);
+	velocities2.show();
 //	solve3(2,1.1,0).show();
 
 
@@ -118,11 +128,13 @@ int main()
 		Direction=makeDirection3S(1,0,0);
 		ji=Piezo.mult(Direction,2).mult(Direction,0);
 		Christofel=Elastic.mult(Direction,2).mult(Direction,1)+ji.extm(ji)/(Permit.mult(Direction,1).mult(Direction,0));
-		velocities=eigval3(Christofel)/100000000000;
+		velocities=sqrt(eigval3(Christofel)/4642.8)/1000;///10000000000;
+			velocities.show();printf("in km/s in direction ");
+			Direction.show(6,4);
 //		pm.addSphere(Direction.data,1);
-		pm1.addRadial(velocities(1),0,0,1);
-		pm2.addRadial(velocities(2),0,0,2);
-		pm3.addRadial(velocities(3),0,0,3);
+		pm1.addRadial(100/velocities(1),0,0,1);
+		pm2.addRadial(100/velocities(2),0,0,2);
+		pm3.addRadial(100/velocities(3),0,0,3);
 			min1=velocities(1);
 			min2=velocities(2);
 			min3=velocities(3);
@@ -134,13 +146,14 @@ int main()
 			Direction=makeDirection3S(1,step*j,step*k);
 			ji=Piezo.mult(Direction,2).mult(Direction,0);
 			Christofel=Elastic.mult(Direction,2).mult(Direction,1)+ji.extm(ji)/(Permit.mult(Direction,1).mult(Direction,0));
-			velocities=eigval3(Christofel)/100000000000;
+			velocities=sqrt(eigval3(Christofel)/4642.8)/1000;///10000000000;
 	//		pm.addSphere(Direction.data,1);
-//			Direction.show();
+			velocities.show();printf("in km/s in direction ");
+			Direction.show(6,4);
 //			if((velocities(1)<0)||(velocities(2)<0)||(velocities(3)<0))velocities.show();
-			pm1.addRadial(velocities(1),step*j,step*k,1);
-			pm2.addRadial(velocities(2),step*j,step*k,2);
-			pm3.addRadial(velocities(3),step*j,step*k,3);
+			pm1.addRadial(100/velocities(1),step*j,step*k,1);
+			pm2.addRadial(100/velocities(2),step*j,step*k,2);
+			pm3.addRadial(100/velocities(3),step*j,step*k,3);
 			min1=(velocities(1)<min1)?velocities(1):min1;
 			min2=(velocities(2)<min2)?velocities(2):min2;
 			min3=(velocities(3)<min3)?velocities(3):min3;
@@ -150,11 +163,13 @@ int main()
 		Direction=makeDirection3S(1,0,Pi);
 		ji=Piezo.mult(Direction,2).mult(Direction,0);
 		Christofel=Elastic.mult(Direction,2).mult(Direction,1)+ji.extm(ji)/(Permit.mult(Direction,1).mult(Direction,0));
-		velocities=eigval3(Christofel)/100000000000;
+		velocities=sqrt(eigval3(Christofel)/4642.8)/1000;///10000000000;
+			velocities.show();printf("in km/s in direction ");
+			Direction.show(6,4);
 //		pm.addSphere(Direction.data,1);
-		pm1.addRadial(velocities(1),0,Pi,1);
-		pm2.addRadial(velocities(2),0,Pi,2);
-		pm3.addRadial(velocities(3),0,Pi,3);
+		pm1.addRadial(100/velocities(1),0,Pi,1);
+		pm2.addRadial(100/velocities(2),0,Pi,2);
+		pm3.addRadial(100/velocities(3),0,Pi,3);
 			min1=(velocities(1)<min1)?velocities(1):min1;
 			min2=(velocities(2)<min2)?velocities(2):min2;
 			min3=(velocities(3)<min3)?velocities(3):min3;
@@ -175,7 +190,7 @@ int main()
 	printf("Make contrast?(1,0)\n");
 	int mc=2;
 //	while(mc*mc-mc)scanf("%d",&mc);
-//	if (mc)
+	if (1)
 	{
 		pm1.init();
 		pm2.init();
@@ -193,7 +208,7 @@ int main()
 			pm1.addRadial(1000*(massive[npoints-1](1)-min1),0,Pi,1);
 			pm2.addRadial(1000*(massive[npoints-1](2)-min2),0,Pi,2);
 			pm3.addRadial(1000*(massive[npoints-1](3)-min3),0,Pi,3);
-	}		
+
 	pm1.filmINI(turns);
 	pm1.render();
 
@@ -203,6 +218,7 @@ int main()
 	pm3.filmINI(turns);
 	pm3.render();
 			
+	}		
 			
 		printf("end of line\n");
 		scanf("%d",mc);

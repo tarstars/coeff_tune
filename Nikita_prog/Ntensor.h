@@ -35,6 +35,7 @@ public:
 	virtual void show(int n, int m,int k,int l);
 
 	friend std::ostream & operator <<(std::ostream &os,Ntensor t);
+	friend Ntensor sqrt(Ntensor t);
 
 	Ntensor operator +(const Ntensor & ten) const;
 	Ntensor operator -(const Ntensor & ten) const;

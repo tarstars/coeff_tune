@@ -1,6 +1,7 @@
 #include"Utils.h"
 #include"Ntensor.h"
 #include"Ncomplex.h"
+#include"stdio.h"
 
 Ntensor4 makeElasticTensor36(double mat [])
 {
@@ -89,6 +90,22 @@ Nvector makeDirection3S(double rho,double phi, double theta)
 Nvector solve3(double a,double b,double c)
 {
 	Nvector ret(3,0);
+
+  double p = b - a * a / 3;
+  double q = 2 * a * a * a / 27 - a * b / 3 + c;
+  double A = sqrt(- 4 * p / 3); 
+ 
+  double c3phi = - 4 * q / (A * A * A);
+ 
+  double phi = acos(c3phi) / 3;
+if(c3phi>=1)phi=0;  
+ 
+  ret(1)= A * cos(phi) - a / 3;
+  ret(2) = A * cos(phi +2.094395103) - a / 3;
+  ret(3) = A * cos(phi - 2.094395103) - a / 3;
+
+//printf("vels: %lf, %lf, %lf,\n",A,c3phi,phi);
+/*
 	double Q=(a*a-3*b)/9;
 	double R=(2*a*a*a-9*a*b+27*c)/54;
 	double S=Q*Q*Q-R*R;
@@ -108,7 +125,8 @@ Nvector solve3(double a,double b,double c)
 		ret(3)=sqrtQ*sign(R)-a/3;
 	}
 	else
-		throw(("error"));
+		printf("Err!\n");//throw(("error"));
+*/
 	/*
 	{
 		if(Q>0)
@@ -141,8 +159,9 @@ Nvector solve3(double a,double b,double c)
 Nvector eigval3(Nmatrix mat)
 {
 	double a=-mat.tr();
-	double b=mat(1,2)*mat(2,1)+mat(1,3)*mat(3,1)+mat(3,2)*mat(2,3)-mat(1,1)*(mat(2,2)+mat(3,3))-mat(2,2)*mat(3,3);
-	double c=mat.det();
+	double b=-(mat(1,2)*mat(2,1)+mat(1,3)*mat(3,1)+mat(3,2)*mat(2,3)-mat(1,1)*(mat(2,2)+mat(3,3))-mat(2,2)*mat(3,3));
+	double c=-mat.det();
 
+//printf("poly %lf, %lf, %lf\n",a,b,c);
 	return solve3(a,b,c);
 }

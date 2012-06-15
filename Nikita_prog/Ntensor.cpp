@@ -120,6 +120,15 @@ std::ostream & operator <<(std::ostream &os, Ntensor t)
 
 }
 
+Ntensor sqrt(Ntensor t)
+{
+		double *nData=new double[t.nels];
+		int *nDims=new int[t.ndim];
+		for(int j=0;j<t.ndim;j++)nDims[j]=t.dims[j];
+		for(int j=0;j<t.nels;j++)nData[j]=sqrt(t.data[j]);
+		return Ntensor(t.ndim,nDims,nData);
+}
+
 Ntensor Ntensor::operator +(const Ntensor & ten) const
 {
 	if(ndim==ten.ndim && nels==ten.nels)

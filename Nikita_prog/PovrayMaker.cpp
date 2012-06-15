@@ -70,6 +70,7 @@ void PovrayMaker::addCamera(double x1, double y1,double z1)
 void PovrayMaker::checkBorder(double x, double y,double z)
 {
 	if((scale==1))scale=x;
+	if(scale==0)scale=1;
 	if(x){x=abs(x);scale=(scale>x)?scale:x;}
 	if(y){y=abs(y);scale=(scale>y)?scale:y;}
 	if(z){z=abs(z);scale=(scale>z)?scale:z;}
