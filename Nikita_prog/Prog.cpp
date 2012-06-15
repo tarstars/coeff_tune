@@ -15,6 +15,7 @@ return data1;
 
 int main()
 {
+	printf("++++++++++++ The Tests ++++++++++++\n");
 		int *p;
 
 		{
@@ -111,15 +112,15 @@ int main()
 //	solve3(2,1.1,0).show();
 
 
-	PovrayMaker pm1(QString("Velocity1"));
-	PovrayMaker pm2(QString("Velocity2"));
-	PovrayMaker pm3(QString("Velocity3"));
+	PovrayMaker pm1(QString("1oVelocity1"));
+	PovrayMaker pm2(QString("1oVelocity2"));
+	PovrayMaker pm3(QString("1oVelocity3"));
 	//nsamp>3!!!!!!
 	int nsamp=100;
 	//nsamp>3!!!!!!
 	int turns=7;
 	int npoints=nsamp*(nsamp-2)/2+2;
-	double Pi=3.1415926535897932384626433832795;
+	double Pi=3.14159265358979323846264338327951;
 	double step=2*Pi/nsamp;
 	double min1,min2,min3;
 	Nvector *massive=new Nvector[npoints];
@@ -190,38 +191,41 @@ int main()
 	printf("Make contrast?(1,0)\n");
 	int mc=2;
 //	while(mc*mc-mc)scanf("%d",&mc);
-	if (1)
+	if (mc)
 	{
-		pm1.init();
-		pm2.init();
-		pm3.init();
-			pm1.addRadial(1000*(massive[0](1)-min1),0,0,1);
-			pm2.addRadial(1000*(massive[0](2)-min2),0,0,2);
-			pm3.addRadial(1000*(massive[0](3)-min3),0,0,3);
+	PovrayMaker pm1m(QString("Velocity1-min"));
+	PovrayMaker pm2m(QString("Velocity2-min"));
+	PovrayMaker pm3m(QString("Velocity3-min"));
+		pm1m.init();
+		pm2m.init();
+		pm3m.init();
+			pm1m.addRadial(1000*(massive[0](1)-min1),0,0,1);
+			pm2m.addRadial(1000*(massive[0](2)-min2),0,0,2);
+			pm3m.addRadial(1000*(massive[0](3)-min3),0,0,3);
 		for(int k=1;k<nsamp/2;k++)
 			for(int j=0;j<nsamp;j++)
 			{
-				pm1.addRadial(1000*(massive[j+1+nsamp*(k-1)](1)-min1),step*j,step*k,1);
-				pm2.addRadial(1000*(massive[j+1+nsamp*(k-1)](2)-min2),step*j,step*k,2);
-				pm3.addRadial(1000*(massive[j+1+nsamp*(k-1)](3)-min3),step*j,step*k,3);
+				pm1m.addRadial(1000*(massive[j+1+nsamp*(k-1)](1)-min1),step*j,step*k,1);
+				pm2m.addRadial(1000*(massive[j+1+nsamp*(k-1)](2)-min2),step*j,step*k,2);
+				pm3m.addRadial(1000*(massive[j+1+nsamp*(k-1)](3)-min3),step*j,step*k,3);
 			}	
-			pm1.addRadial(1000*(massive[npoints-1](1)-min1),0,Pi,1);
-			pm2.addRadial(1000*(massive[npoints-1](2)-min2),0,Pi,2);
-			pm3.addRadial(1000*(massive[npoints-1](3)-min3),0,Pi,3);
+			pm1m.addRadial(1000*(massive[npoints-1](1)-min1),0,Pi,1);
+			pm2m.addRadial(1000*(massive[npoints-1](2)-min2),0,Pi,2);
+			pm3m.addRadial(1000*(massive[npoints-1](3)-min3),0,Pi,3);
 
-	pm1.filmINI(turns);
-	pm1.render();
+	pm1m.filmINI(turns);
+	pm1m.render();
 
-	pm2.filmINI(turns);
-	pm2.render();
+	pm2m.filmINI(turns);
+	pm2m.render();
 
-	pm3.filmINI(turns);
-	pm3.render();
+	pm3m.filmINI(turns);
+	pm3m.render();
 			
 	}		
 			
 		printf("end of line\n");
-		scanf("%d",mc);
+//		scanf("%d",mc);
 		}
 
 	//char s;
