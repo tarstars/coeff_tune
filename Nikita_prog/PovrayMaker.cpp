@@ -5,6 +5,7 @@
 PovrayMaker::PovrayMaker()
 {
 	dnum=0;
+	scale=1;
 	fileName=QString("Demo");
 	file=new QFile(fileName+QString("%1.pov").arg(dnum));
 	fileINI=new QFile(fileName+QString("%1.ini").arg(dnum));
@@ -15,14 +16,30 @@ PovrayMaker::PovrayMaker()
 PovrayMaker::PovrayMaker(QString name)
 {
 	dnum=0;
+	scale=1;
 	fileName=name;
 	file=new QFile(fileName+QString("%1.pov").arg(dnum));
 	fileINI=new QFile(fileName+QString("%1.ini").arg(dnum));
 	init();
 }
 
+PovrayMaker::~PovrayMaker()
+{
+	addCamera();
+
+	addLightSource(scale, scale, scale);
+
+	double axLen=1.5*scale;
+	double axThick=0.005*scale;
+	addCylinder(0, 0,0,axLen, 0,0, axThick,1);
+	addCylinder(0, 0,0,0, axLen,0, axThick,2);
+	addCylinder(0, 0,0,0, 0,axLen, axThick,3);
+}
+
+
 void PovrayMaker::init()
 {
+	if (file->isOpen())file->close();
 	if (!file->open(QIODevice::WriteOnly | QIODevice::Text))
 	{
 		printf("%s\n",QString("Файл %1 не открыт").arg(fileName+QString("%1.pov").arg(dnum)));
@@ -33,26 +50,33 @@ void PovrayMaker::init()
 	textOut.setDevice(file);
 
 	textOut<<"#include \"colors.inc\""<<"\n"
-		   <<"#include \"stones.inc\""<<"\n"
+//		   <<"#include \"stones.inc\""<<"\n"
 		   <<"\n";
+}
 
-
+void PovrayMaker::addCamera(double x1, double y1,double z1)
+{
 	textOut
 		<<QString("camera")<<"\n"
 		<<QString("{")<<"\n"
-		<<QString("	 location <%1*cos(2*pi*clock),%1,%1*sin(2*pi*clock)>").arg(2)<<"\n"
+		<<QString("	 location <%1*cos(2*pi*clock),%1,%1*sin(2*pi*clock)>").arg(2*scale)<<"\n"
 //		<<QString("	 location <0,1,1>").arg(2)<<"\n"
-		<<QString("	 look_at  <0, 0,  0>")<<"\n"
+		<<QString("	 look_at  <%1, %2,  %3>").arg(x1).arg(z1).arg(y1)<<"\n"
 		<<QString("}")<<"\n"
 		<<"\n";
 
-	addLightSource(2, -3, 4);
-
-	addCylinder(0, 0,0,2, 0,0, 0.05,1);
-	addCylinder(0, 0,0,0, 2,0, 0.05,2);
-	addCylinder(0, 0,0,0, 0,2, 0.05,3);
 }
 
+void PovrayMaker::checkBorder(double x, double y,double z)
+{
+	if((scale==1))scale=x;
+	if(x){x=abs(x);scale=(scale>x)?scale:x;}
+	if(y){y=abs(y);scale=(scale>y)?scale:y;}
+	if(z){z=abs(z);scale=(scale>z)?scale:z;}
+	
+	
+	
+}
 void PovrayMaker::filmINI(int Nframes)
 {
 	if (!fileINI->open(QIODevice::WriteOnly | QIODevice::Text))
@@ -72,7 +96,13 @@ void PovrayMaker::filmINI(int Nframes)
 		<<"\n";
 	fileINI->close();
 }
+/*
+int PovrayMaker::save(QString name)
+{
 
+	return 17;
+}
+*/
 void PovrayMaker::pigment(double R, double G,double B)
 {
 	textOut
@@ -101,6 +131,9 @@ void PovrayMaker::addSphere(double x, double y,double z, double r, double c)
 	if(c)
 		pigment(c);
 
+	checkBorder(x,y,z);
+	checkBorder(r);
+
 }
 void PovrayMaker::addSphere(double *vec, double r, double c)
 {
@@ -119,6 +152,9 @@ void PovrayMaker::addCylinder(double x, double y,double z,double x1, double y1,d
   		textOut<<QString("  %1").arg(open)<<"\n";           // Remove end caps
 	if(c)
 		pigment(c);
+	checkBorder(x,y,z);
+	checkBorder(x1,y1,z1);
+	checkBorder(r);
 
 }
 
@@ -133,6 +169,9 @@ void PovrayMaker::addCone(double x, double y,double z,double r,double x1, double
   		textOut<<QString("  %1").arg(open)<<"\n";           // Remove end caps
 	if(c)
 		pigment(c);
+	checkBorder(x,y,z);
+	checkBorder(x1,y1,z1);
+	checkBorder(r,r1);
 
 }
 
@@ -141,7 +180,10 @@ void PovrayMaker::addRadial(double r, double phi,double theta, double c)
 	double x1=r*cos(phi)*sin(theta);
 	double y1=r*sin(phi)*sin(theta);
 	double z1=r*cos(theta);
-	addCone(0,0,0,0,x1, y1, z1, 1, c);
+//	addCone(0,0,0,0,x1, y1, z1, scale*0.025, c);
+	addSphere(x1, y1, z1, scale*0.075, c);
+
+	checkBorder(x1,y1,z1);
 }
 void PovrayMaker::codeLine(QString line)
 {
@@ -159,12 +201,21 @@ void PovrayMaker::addLightSource(double x, double y,double z, double c)
 
 int PovrayMaker::render()
 {
-	if (file->isOpen())
-		file->close();
+	addCamera();
+
+	addLightSource(scale, scale, scale);
+
+	double axLen=1.5*scale;
+	double axThick=0.005*scale;
+	addCylinder(0, 0,0,axLen, 0,0, axThick,1);
+	addCylinder(0, 0,0,0, axLen,0, axThick,2);
+	addCylinder(0, 0,0,0, 0,axLen, axThick,3);
+
+	file->close();
 
 	QFile iniFile(fileName+QString("%1.ini").arg(dnum));
 
-	QString processor("D:\\Program\" \"Files\\POVRAY\\bin\\pvengine /RENDER ");
+	QString processor("D:\\Program\" \"Files\\POVRAY\\bin\\pvengine /EXIT ");
 //	QString processor("notepad ");
 
 	if(iniFile.exists())

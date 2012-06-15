@@ -16,9 +16,9 @@ public:
 	Ntensor();
 	Ntensor(const Ntensor &);
 	Ntensor &operator =(const Ntensor &);
-	Ntensor(int i_ndim);
 	Ntensor(int i_ndim,int *i_dims, int type=-1);
 	Ntensor(int i_ndim,int *i_dims,double* vals);
+	Ntensor(double x);
 	virtual ~Ntensor();
 	
 	int ind(int* i_inds);

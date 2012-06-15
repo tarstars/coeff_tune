@@ -65,80 +65,147 @@ int main()
 	Nmatrix ij=lambda.toMatrix3();
 	ij.show();
 	printf("tr=%lf det=%lf \n",ij.tr(),ij.det());
+	Nmatrix((ij*2)).show();
 
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//============================================================
+	printf("++++++++++++ The Programm ++++++++++++\n");
 
-	Ntensor4 Elastic=makeElasticTensor8(1,2,3,4,5,6,7,8);
+//	Ntensor4 Elastic=makeElasticTensor8(1,2,3,4,5,6,7,8);
+	Ntensor4 Elastic=makeElasticTensor8(19.886e10, 5.467e10, 6.799e10, 0.783e10,19.886e10,-0.783e10, 23.418e10, 5.985e10);
 	Elastic.show6();
 
-	Ntensor3 Piezo=makePiezoTensor5(1,2,3,4,5);
+//	Ntensor3 Piezo=makePiezoTensor5(1,2,3,4,5);
+	Ntensor3 Piezo=makePiezoTensor5(3.655, 2.407, 0.328, 0.328, 1.894);
 	Piezo.show6();
 	Piezo.show();
 
-	Nmatrix Permit=makePermitTensor2(1,2);
+//	Nmatrix Permit=makePermitTensor2(1,2);
+	Nmatrix Permit=makePermitTensor2(44.9,26.7);
 	Permit.show();
 
-	Nvector Direction=makeDirection3D(1,2,3);
+	double epsilon0=8.8542e-12;
+
+	Nvector Direction=makeDirection3D(1,0,0);
 	Direction.show();
 
 	Ntensor ji=Piezo.mult(Direction,2).mult(Direction,0);
 	ji.show();
 
-	Nmatrix Christofel=Elastic.mult(Direction,2).mult(Direction,1)+ji.extm(ji)/(Permit.mult(Direction,1).mult(Direction,0));
+	Nmatrix Christofel=Elastic.mult(Direction,2).mult(Direction,1)+ji.extm(ji)/(Permit.mult(Direction,1).mult(Direction,0))/epsilon0;
 	Christofel.show();
 
 
 	Nvector velocities=eigval3(Christofel);
 	velocities.show();
-	solve3(2,1.1,0).show();
+//	solve3(2,1.1,0).show();
 
 
 	PovrayMaker pm1(QString("Velocity1"));
 	PovrayMaker pm2(QString("Velocity2"));
 	PovrayMaker pm3(QString("Velocity3"));
-	int nsamp=4;
+	//nsamp>3!!!!!!
+	int nsamp=100;
+	//nsamp>3!!!!!!
+	int turns=7;
+	int npoints=nsamp*(nsamp-2)/2+2;
 	double Pi=3.1415926535897932384626433832795;
 	double step=2*Pi/nsamp;
+	double min1,min2,min3;
+	Nvector *massive=new Nvector[npoints];
+
+	{
+		Direction=makeDirection3S(1,0,0);
+		ji=Piezo.mult(Direction,2).mult(Direction,0);
+		Christofel=Elastic.mult(Direction,2).mult(Direction,1)+ji.extm(ji)/(Permit.mult(Direction,1).mult(Direction,0));
+		velocities=eigval3(Christofel)/100000000000;
+//		pm.addSphere(Direction.data,1);
+		pm1.addRadial(velocities(1),0,0,1);
+		pm2.addRadial(velocities(2),0,0,2);
+		pm3.addRadial(velocities(3),0,0,3);
+			min1=velocities(1);
+			min2=velocities(2);
+			min3=velocities(3);
+			massive[0]=velocities;
+	}
 	for(int k=1;k<nsamp/2;k++)
 		for(int j=0;j<nsamp;j++)
 		{
 			Direction=makeDirection3S(1,step*j,step*k);
 			ji=Piezo.mult(Direction,2).mult(Direction,0);
 			Christofel=Elastic.mult(Direction,2).mult(Direction,1)+ji.extm(ji)/(Permit.mult(Direction,1).mult(Direction,0));
-			velocities=eigval3(Christofel);
+			velocities=eigval3(Christofel)/100000000000;
 	//		pm.addSphere(Direction.data,1);
+//			Direction.show();
+//			if((velocities(1)<0)||(velocities(2)<0)||(velocities(3)<0))velocities.show();
 			pm1.addRadial(velocities(1),step*j,step*k,1);
 			pm2.addRadial(velocities(2),step*j,step*k,2);
 			pm3.addRadial(velocities(3),step*j,step*k,3);
+			min1=(velocities(1)<min1)?velocities(1):min1;
+			min2=(velocities(2)<min2)?velocities(2):min2;
+			min3=(velocities(3)<min3)?velocities(3):min3;
+			massive[j+1+nsamp*(k-1)]=velocities;
 		}
-	{
-		Direction=makeDirection3S(1,0,0);
-		ji=Piezo.mult(Direction,2).mult(Direction,0);
-		Christofel=Elastic.mult(Direction,2).mult(Direction,1)+ji.extm(ji)/(Permit.mult(Direction,1).mult(Direction,0));
-		velocities=eigval3(Christofel);
-//		pm.addSphere(Direction.data,1);
-		pm1.addRadial(velocities(1),0,0,1);
-		pm2.addRadial(velocities(2),0,0,2);
-		pm3.addRadial(velocities(3),0,0,3);
-	}
 	{
 		Direction=makeDirection3S(1,0,Pi);
 		ji=Piezo.mult(Direction,2).mult(Direction,0);
 		Christofel=Elastic.mult(Direction,2).mult(Direction,1)+ji.extm(ji)/(Permit.mult(Direction,1).mult(Direction,0));
-		velocities=eigval3(Christofel);
+		velocities=eigval3(Christofel)/100000000000;
 //		pm.addSphere(Direction.data,1);
 		pm1.addRadial(velocities(1),0,Pi,1);
 		pm2.addRadial(velocities(2),0,Pi,2);
 		pm3.addRadial(velocities(3),0,Pi,3);
+			min1=(velocities(1)<min1)?velocities(1):min1;
+			min2=(velocities(2)<min2)?velocities(2):min2;
+			min3=(velocities(3)<min3)?velocities(3):min3;
+			massive[npoints-1]=velocities;
 	}
-
+/**/
 	pm1.codeLine(QString("//aaaaaaaaa!"));
-	pm1.filmINI(4);
+
+	pm1.filmINI(turns);
 	pm1.render();
-//	pm2.render();
-//	pm3.render();
-	printf("end of line\n");
+
+	pm2.filmINI(turns);
+	pm2.render();
+
+	pm3.filmINI(turns);
+	pm3.render();
+	printf("minimum speed is %lf\n",min1);
+	printf("Make contrast?(1,0)\n");
+	int mc=2;
+//	while(mc*mc-mc)scanf("%d",&mc);
+//	if (mc)
+	{
+		pm1.init();
+		pm2.init();
+		pm3.init();
+			pm1.addRadial(1000*(massive[0](1)-min1),0,0,1);
+			pm2.addRadial(1000*(massive[0](2)-min2),0,0,2);
+			pm3.addRadial(1000*(massive[0](3)-min3),0,0,3);
+		for(int k=1;k<nsamp/2;k++)
+			for(int j=0;j<nsamp;j++)
+			{
+				pm1.addRadial(1000*(massive[j+1+nsamp*(k-1)](1)-min1),step*j,step*k,1);
+				pm2.addRadial(1000*(massive[j+1+nsamp*(k-1)](2)-min2),step*j,step*k,2);
+				pm3.addRadial(1000*(massive[j+1+nsamp*(k-1)](3)-min3),step*j,step*k,3);
+			}	
+			pm1.addRadial(1000*(massive[npoints-1](1)-min1),0,Pi,1);
+			pm2.addRadial(1000*(massive[npoints-1](2)-min2),0,Pi,2);
+			pm3.addRadial(1000*(massive[npoints-1](3)-min3),0,Pi,3);
+	}		
+	pm1.filmINI(turns);
+	pm1.render();
+
+	pm2.filmINI(turns);
+	pm2.render();
+
+	pm3.filmINI(turns);
+	pm3.render();
+			
+			
+		printf("end of line\n");
+		scanf("%d",mc);
 		}
 
 	//char s;

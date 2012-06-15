@@ -38,12 +38,14 @@ Ntensor::~Ntensor()
 	if(data) delete [] data;
 }
 
-Ntensor::Ntensor(int i_ndim)
+Ntensor::Ntensor(double x)
 {
-	ndim=i_ndim;
+	ndim=1;
 	dims=new int[ndim];
-	data=0;
-	nels=0;
+	dims[0]=1;
+	nels=1;
+	data=new double[nels];
+	data[0]=x;
 }
 
 Ntensor::Ntensor(int i_ndim, int *i_dims, int type)
@@ -129,17 +131,39 @@ Ntensor Ntensor::operator +(const Ntensor & ten) const
 
 		return Ntensor(ndim,nDims,nData);
 	}
+	else if (ten.nels==1)
+	{
+		double *nData=new double[nels];
+		int *nDims=new int[ndim];
+		for(int j=0;j<ndim;j++)nDims[j]=dims[j];
+		for(int j=0;j<nels;j++)nData[j]=data[j]+ten.data[0];
+		return Ntensor(ndim,nDims,nData);
+	}
 	else
 		return Ntensor();
 }
 Ntensor Ntensor::operator -(const Ntensor & ten) const
 {
-	double *nData=new double[nels];
-	int *nDims=new int[ndim];
-	for(int j=0;j<ndim;j++)nDims[j]=dims[j];
-	for(int j=0;j<nels;j++)nData[j]=data[j]-ten.data[j];
+	if(ndim==ten.ndim && nels==ten.nels)
+	{
+		double *nData=new double[nels];
+		int *nDims=new int[ndim];
+		for(int j=0;j<ndim;j++)nDims[j]=dims[j];
+		for(int j=0;j<nels;j++)nData[j]=data[j]-ten.data[j];
 
-	return Ntensor(ndim,nDims,nData);
+		return Ntensor(ndim,nDims,nData);
+	}
+	else if (ten.nels==1)
+	{
+		double *nData=new double[nels];
+		int *nDims=new int[ndim];
+		for(int j=0;j<ndim;j++)nDims[j]=dims[j];
+		for(int j=0;j<nels;j++)nData[j]=data[j]-ten.data[0];
+		return Ntensor(ndim,nDims,nData);
+	}
+	else
+		return Ntensor();
+
 }
 Ntensor Ntensor::operator *(const Ntensor & ten) const
 {
