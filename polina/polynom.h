@@ -1,0 +1,2 @@
+#ifndef POLYNOM
+#endif
