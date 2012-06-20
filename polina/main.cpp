@@ -2,6 +2,7 @@
 
 #include "piezo_tensor.h"
 #include "material_tensor.h"
+#include "matrix.h"
 #include "util.h"
 
 #include <conio.h>
@@ -16,11 +17,11 @@ void coeff_tune() {
 
   MaterialTensor mt = make_material_tensor(19.886e10, 5.467e10, 6.799e10, 0.783e10, 23.418e10, 5.985e10, 7.209e10);
 
-  // Matrix3 eps = make_permit();
+  Matrix3 eps = make_permit(44.9, 26.7);
 
-  // double rho = ;
+  double rho = 4642.8;
 
-  // Vector3 n = (0,0,1);
+  Vector3 n = (0,0,1);
 
   // Matrix3 christ = make_christ(n,pt,mt,eps);
 
