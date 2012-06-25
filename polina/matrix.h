@@ -8,6 +8,8 @@ class Matrix3{
  public:
   Matrix3();
 
+  Poly3 getCharPoly()const;
+
   double& operator()(int p, int q){return dat[p][q];}
   const double& operator()(int p, int q)const {return dat[p][q];}
 
