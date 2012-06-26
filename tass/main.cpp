@@ -1,5 +1,7 @@
 #include <cmath>
+#include <fstream>
 #include <iostream>
+#include <vector>
 
 #include "mat3.h"
 #include "material_tensor.h"
@@ -9,6 +11,47 @@
 #include "vec3.h"
 
 using namespace std;
+
+typedef pair<Vec3, Vec3> NVels;
+
+
+
+//D:\\arseniy\\2012\\c\\coeff_tune
+//..\\linbo3_data\\linbo3_sqs_0c_sw.txt
+
+void testReadFile(){
+  ifstream sour("..\\linbo3_data\\linbo3_sqs_0c_sw.txt");
+
+  int np, nq;
+  cout << "np = " << np << " nq = " << nq << endl;
+
+  if (!sour){
+    cout << "problems with file open" << endl;
+    return;
+  }
+
+  cout << "file is ready" << endl;
+
+
+  sour >> np >> nq;
+
+  cout << "np = " << np << " nq = " << nq << endl;
+
+  double val;
+
+  vector<pair<Vec3, Vec3> > ret;
+
+  for(int p = 0; p < np; ++p){
+    for(int q = 0; q < nq; ++q){
+      sour >> val;
+
+      Vec3 n(cos(3), sin(15), cos(18));
+      Vec3 vel(1, 2, 3);
+
+      ret.push_back(make_pair(n, vel));
+    }
+  }
+}
 
 void work(){
   PiezoTensor pt = makePiezoTensor(3.655, 2.407, 0.328, 1.894);
@@ -46,5 +89,6 @@ void testPolynome(){
 
 int main(){
   //testPolynome();
-  work();
+  //work();
+  testReadFile();
 }
