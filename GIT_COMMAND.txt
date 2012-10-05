@@ -1,0 +1,10 @@
+cd /d/
+cd ForSenya/Prog/coeff_tune
+git pull
+...
+gitk&
+git add __.___ _____.___
+git status
+...
+git commit -am "Blablabla"
+git push
