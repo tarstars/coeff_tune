@@ -1,5 +1,7 @@
 #include <iostream>
+#include <fstream>
 #include <cmath>
+#include <vector>
 
 #include "piezo_tensor.h"
 #include "material_tensor.h"
@@ -10,7 +12,46 @@
 
 using namespace std;
 
-int main()
+//typedef pair<Vector3, Vector3> NVels;
+
+
+void testReadFile(){
+  ifstream sour("..\\..\\linbo3_data\\linbo3_fqs_0c_sw.txt");
+  int np = 0, nq = 0;
+  cout << "np = " << np << " nq = " << nq << endl;
+
+  if (!sour){
+    cout << "problems with file open" << endl;
+    return;
+  }
+
+  cout << "file is ready" << endl;
+
+
+  sour >> np >> nq;
+
+  cout << "np = " << np << " nq = " << nq << endl;
+  /*
+  double val;
+
+  vector<NVels> ret;
+
+  for(int p = 0; p < np; ++p){
+    for(int q = 0; q < nq; ++q){
+      sour >> val;
+
+      Vector3 n = makeWaveVector(cos(3), sin(15), cos(18));
+      Vector3 vel = makeWaveVector(1, 2, 3);
+
+      ret.push_back(make_pair(n, vel));
+    }
+  }
+  */
+}
+
+
+
+void work()
 {
   cout << "Hello and welcome to Aperture Science Enrichment Center's" << endl << "Cute Piezocrystal's Acoustic Waves Speed Finder!" << endl << endl;
   
@@ -63,4 +104,10 @@ int main()
   cout << "Velocity 3 = " << v3 << " [m/sec];" << endl;
 
   cout << endl << "Cake is waiting for you!" << endl;
+}
+
+int main()
+{
+  //  work();
+  testReadFile();
 }
