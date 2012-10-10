@@ -17,9 +17,9 @@ int main(void){
   simulation.initializeRandomGenerator();
   simulation.setTrueConstants(Constants{50, 50, 50, 50});
   
-  params.initialTemperature = 0.0002;  /*  in arbitrary units, not a real temperature */
-  params.iterationsNumber = 2E6;  /* maximum number of iterations for annealing*/
-  params.doCooling  = false;  /* ??? */
+  params.initialTemperature = 0.0002;  /* in arbitrary units, not a real temperature */
+  params.iterationsNumber = 2E6;  /* maximum number of iterations for annealing */
+  params.doCooling  = false;  /* reduce the temperature as the number of iterations grows larger */
   
   tuned_constants = simulation.tuneConstants(Constants{48, 49, 51, 52}, params);
   

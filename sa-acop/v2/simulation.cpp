@@ -52,31 +52,28 @@ inline  double  Simulation::randomGaussian(double dispersion){
 
 Constants Simulation::randomizeConstants(Constants constants, double dispersion){
   int const_num = (int)ceil(this->randomUniform(0, 4));
+  double  delta = this->randomGaussian(dispersion);
   
   switch (const_num){
     case  1:
-      constants.a +=  this->randomGaussian(dispersion);
+      constants.a +=  delta;
       break;
       
     case  2:
-      constants.b +=  this->randomGaussian(dispersion);
+      constants.b +=  delta;
       break;
       
     case  3:
-      constants.c +=  this->randomGaussian(dispersion);
+      constants.c +=  delta;
       break;
       
     case  4:
-      constants.d +=  this->randomGaussian(dispersion);
+      constants.d +=  delta;
       break;
   } //  switch
   
   return  constants;
 } //  Simulation::randomizeConstants
-
-//void  Simulation::setParams(SimAnnealingParams params){
-//  this->params  = params;
-//} //  Simulation::setParams
 
 void  Simulation::setTrueConstants(Constants true_constants){
   this->true_constants  = true_constants;
@@ -102,10 +99,9 @@ Constants Simulation::tuneConstants(Constants constants, AnnealingParams params)
   Constants tuned_constants = constants;
   Constants previous_constants;
   
-  double  init_residual = this->calculateResidual(constants);
-  double  residual  = init_residual;
-  double  best_residual = init_residual;
-  double  previous_residual;
+  double  residual  = this->calculateResidual(constants);
+  double  best_residual = residual;
+  double  previous_residual = residual;
   
   double  Temperature = params.initialTemperature;
   double  probability;
@@ -118,7 +114,7 @@ Constants Simulation::tuneConstants(Constants constants, AnnealingParams params)
     cout <<  100 * ((double)i / params.iterationsNumber);
     cout << "%" << "\r";
     
-    //  Changing constants till energy become lower
+    //  Changing constants till energy becomes lower
     while(true) {
       previous_constants = constants;
       previous_residual  = this->calculateResidual(previous_constants);
@@ -140,7 +136,7 @@ Constants Simulation::tuneConstants(Constants constants, AnnealingParams params)
         break;
       }
       else{
-        //  Modification is too weak
+        //  Modification's too weak - let's try again
         constants = previous_constants;
       }
       

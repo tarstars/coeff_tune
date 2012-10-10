@@ -39,7 +39,6 @@ class Simulation{
     void  initializeRandomGenerator();
     void  freeRandomGenerator();
     void  setTrueConstants(Constants true_constants);
-//    void  setParams(SimAnnealingParams params);
     
     Constants tuneConstants(Constants constants, AnnealingParams params);
 };
