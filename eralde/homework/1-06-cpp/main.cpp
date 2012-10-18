@@ -91,9 +91,9 @@ int decFast(tupleInt3 remainders) throw(const char*){
   //  7, 11, 13 are coprime
   int N = 7 * 11 * 13; //  == 1001
   
-  int n7 = (11 * 13); //  3
-  int n11 = (7 * 13); //  3
-  int n13 = (7 * 11); //  12
+  int n7 = (11 * 13); //  143
+  int n11 = (7 * 13); //  91
+  int n13 = (7 * 11); //  77
   
   int y7 = 5; //  y7 * n7 = 1 (mod 7)
   int y11 = 4; //  ...
@@ -113,19 +113,25 @@ int main(void) {
 
   cout << test1;
   cout << dec(test1) << endl;
+  cout << "enc(dec(x)): " << enc(dec(test1));
   cout << test2;
   cout << dec(test2) << endl;
+  cout << "enc(dec(x)): " << enc(dec(test1));
   cout << test3;
   cout << dec(test3) << endl;
+  cout << "enc(dec(x)): " << enc(dec(test1));
   
   cout << endl << "'Fast' version of dec():" << endl; 
   
-  cout << decFast(tupleInt3(1, 2, 3)) << endl;
-  cout << enc(decFast(tupleInt3(1, 2, 3)));
-  cout << decFast(tupleInt3(3, 2, 1)) << endl;
-  cout << enc(decFast(tupleInt3(3, 2, 1)));
-  cout << decFast(tupleInt3(1, 1, 0)) << endl;
-  cout << enc(decFast(tupleInt3(1, 1, 0))) << endl;
+  cout << test1;
+  cout << decFast(test1) << endl;
+  cout << "enc(dec(x)): " << enc(decFast(test1));
+  cout << test2;
+  cout << decFast(test2) << endl;
+  cout << "enc(dec(x)): " << enc(decFast(test2));
+  cout << test3;
+  cout << decFast(test3) << endl;
+  cout << "enc(dec(x)): " << enc(decFast(test3));
   
   return  0;
 } //  main
