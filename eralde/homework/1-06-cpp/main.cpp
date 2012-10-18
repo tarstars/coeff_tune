@@ -116,10 +116,10 @@ int main(void) {
   cout << "enc(dec(x)): " << enc(dec(test1));
   cout << test2;
   cout << dec(test2) << endl;
-  cout << "enc(dec(x)): " << enc(dec(test1));
+  cout << "enc(dec(x)): " << enc(dec(test2));
   cout << test3;
   cout << dec(test3) << endl;
-  cout << "enc(dec(x)): " << enc(dec(test1));
+  cout << "enc(dec(x)): " << enc(dec(test3));
   
   cout << endl << "'Fast' version of dec():" << endl; 
   
