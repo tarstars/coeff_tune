@@ -95,7 +95,7 @@ int decFast(tupleInt3 remainders) throw(const char*){
   int n11 = (7 * 13); //  3
   int n13 = (7 * 11); //  12
   
-  int y7 = 5; //  m7 * n7 = 1 (mod 7)
+  int y7 = 5; //  y7 * n7 = 1 (mod 7)
   int y11 = 4; //  ...
   int y13 = 12; //  ...
   
@@ -103,12 +103,22 @@ int decFast(tupleInt3 remainders) throw(const char*){
 } //  decFast
 
 int main(void) {
-  cout << enc(21);
-  cout << dec(enc(21)) << endl << endl;
+  cout << endl << "enc(): remainders for 21 are --> " << enc(21) << endl;
+
+  tupleInt3 test1(1, 2, 3);
+  tupleInt3 test2(3, 2, 1);
+  tupleInt3 test3(1, 1, 0);
   
-  cout << dec(tupleInt3(1, 2, 3)) << endl;
-  cout << dec(tupleInt3(3, 2, 1)) << endl;
-  cout << dec(tupleInt3(1, 1, 0)) << endl << endl;
+  cout << "Naive version of dec():" << endl;
+
+  cout << test1;
+  cout << dec(test1) << endl;
+  cout << test2;
+  cout << dec(test2) << endl;
+  cout << test3;
+  cout << dec(test3) << endl;
+  
+  cout << endl << "'Fast' version of dec():" << endl; 
   
   cout << decFast(tupleInt3(1, 2, 3)) << endl;
   cout << enc(decFast(tupleInt3(1, 2, 3)));
