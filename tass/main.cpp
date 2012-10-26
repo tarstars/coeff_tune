@@ -14,24 +14,13 @@ using namespace std;
 
 typedef pair<Vec3, Vec3> NVels;
 
-
-
 //D:\\arseniy\\2012\\c\\coeff_tune
 //..\\linbo3_data\\linbo3_sqs_0c_sw.txt
 
-void testReadFile(){
+void testReadFile() {
   ifstream sour("..\\linbo3_data\\linbo3_sqs_0c_sw.txt");
 
   int np, nq;
-  cout << "np = " << np << " nq = " << nq << endl;
-
-  if (!sour){
-    cout << "problems with file open" << endl;
-    return;
-  }
-
-  cout << "file is ready" << endl;
-
 
   sour >> np >> nq;
 
@@ -39,9 +28,17 @@ void testReadFile(){
 
   double val;
 
+  vector<double> phis(nq);
+  for(int i = 0; i < nq; ++i) {
+    sour >> phis[i];
+  }
+
   vector<pair<Vec3, Vec3> > ret;
 
   for(int p = 0; p < np; ++p){
+    double theta;
+    sour >> theta;
+    
     for(int q = 0; q < nq; ++q){
       sour >> val;
 
@@ -53,7 +50,7 @@ void testReadFile(){
   }
 }
 
-void work(){
+void work() {
   PiezoTensor pt = makePiezoTensor(3.655, 2.407, 0.328, 1.894);
   MaterialTensor mt = makeMaterialTensor(19.886e10, 5.467e10, 6.799e10, 0.783e10, 23.418e10, 5.985e10, 7.209e10);
 
@@ -81,13 +78,13 @@ void work(){
   cout << "velocities = " << v1 << " " << v2 << " " << v3 << endl;
 }
 
-void testPolynome(){
+void testPolynome() {
   double g1, g2, g3;
   Poly3(1, -11, 31, -21).solve(&g1, &g2, &g3);
   cout << "g1 g2 g3 = " << g1 << " " << g2 << " " << g3 << endl;
 }
 
-int main(){
+int main() {
   //testPolynome();
   //work();
   testReadFile();
