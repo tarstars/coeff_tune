@@ -12,41 +12,96 @@
 
 using namespace std;
 
-typedef pair<Vec3, Vec3> NVels;
+typedef pair<Vec3, Vec3> NVels; //first = n, second = v1, v2, v3
+typedef vector<pair<Vec3, Vec3> > VNVels;
 
 //D:\\arseniy\\2012\\c\\coeff_tune
 //..\\linbo3_data\\linbo3_sqs_0c_sw.txt
 
-void testReadFile() {
-  ifstream sour("..\\linbo3_data\\linbo3_sqs_0c_sw.txt");
+VNVels readFile(string flnm1, string flnm2, string flnm3) {
+  ifstream sour1(flnm1.c_str());
+  ifstream sour2(flnm2.c_str());
+  ifstream sour3(flnm3.c_str());
 
-  int np, nq;
+  int np1, nq1;
+  int np2, nq2;
+  int np3, nq3;
 
-  sour >> np >> nq;
+  sour1 >> np1 >> nq1;
+  sour2 >> np2 >> nq2;
+  sour3 >> np3 >> nq3;
 
-  cout << "np = " << np << " nq = " << nq << endl;
+  if (np1 != np2) {
+    throw(string("readFile: mismatch dimensions in 1 and 2 files"));
+  }
 
-  double val;
+  if (np2 != np3) {
+    throw(string("readFile: mismatch dimensions in 2 and 3 files"));
+  }
+
+  int np = np1, nq = nq1;
+
+  if (!sour1) {
+    throw(string("problem opening file 1"));
+  }
+
+  if (!sour2) {
+    throw(string("problem opening file 2"));
+  }
+
+  if (!sour3) {
+    throw(string("problem opening file 3"));
+  }
 
   vector<double> phis(nq);
   for(int i = 0; i < nq; ++i) {
-    sour >> phis[i];
+    sour1 >> phis[i];
+    phis[i] *= M_PI / 180;
+
+    double trash;
+    sour2 >> trash;
+    sour3 >> trash;
   }
 
-  vector<pair<Vec3, Vec3> > ret;
+  VNVels ret;
+
+  cout << "first" << endl;
 
   for(int p = 0; p < np; ++p){
     double theta;
-    sour >> theta;
+    sour1 >> theta;
+    theta *= M_PI / 180;
+
+    double trash;
+    sour2 >> trash;
+    sour3 >> trash;
     
     for(int q = 0; q < nq; ++q){
-      sour >> val;
+      double val1, val2, val3;
+      sour1 >> val1;
+      sour2 >> val2;
+      sour3 >> val3;
 
-      Vec3 n(cos(3), sin(15), cos(18));
-      Vec3 vel(1, 2, 3);
+      Vec3 n(sin(theta) * cos(phis[q]), sin(theta) * sin(phis[q]), cos(theta));
+      Vec3 vel(val1, val2, val3);
 
       ret.push_back(make_pair(n, vel));
     }
+  }
+
+  cout << "second" << endl;
+
+  return ret;
+}
+
+void testReadFile() {
+  VNVels vecs = readFile("../linbo3_data/linbo3_sqs_0c_sw.txt",
+			 "../linbo3_data/linbo3_ql_0c_sw.txt",
+			 "../linbo3_data/linbo3_fqs_0c_sw.txt"
+			 );
+  
+  for(auto it = vecs.begin(); it != vecs.end(); ++it) {
+    cout << "vect = " << it->first << " " << it->second << endl;
   }
 }
 
@@ -87,5 +142,9 @@ void testPolynome() {
 int main() {
   //testPolynome();
   //work();
-  testReadFile();
+  try { 
+    testReadFile();
+  } catch (string msg) {
+    cout << "error: " << msg << endl;
+  }
 }
