@@ -7,13 +7,13 @@ class Matrix3;
 class Vector3;
 
 PiezoTensor 
-makePiezoTensor(double e15, double e22, double e31, double e33);
+makePiezoTensor(const double*);
 
 MaterialTensor 
-makeMaterialTensor(double c11, double c12, double c13, double c14, double c33, double c44, double c66);
+makeMaterialTensor(const double*);
 
 Matrix3
-makeEpsilonTensor(double eps11, double eps33);
+makeEpsilonTensor(const double*);
 
 Vector3
 makeWaveVector(double x, double y, double z);

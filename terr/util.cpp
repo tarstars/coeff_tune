@@ -9,7 +9,11 @@ int magic[3][3] = {{0, 5, 4},
 		   {4, 3, 2}};
 
 PiezoTensor 
-makePiezoTensor(double e15, double e22, double e31, double e33){
+makePiezoTensor(const double* cfpiezo){
+  double e15 = cfpiezo[0];
+  double e22 = cfpiezo[1];
+  double e31 = cfpiezo[2];
+  double e33 = cfpiezo[3];
   PiezoTensor ret;
   double ptc[3][6] = {{0, 0, 0, 0, e15, -e22}, 
 		      {-e22, e22, 0, e15, 0, 0}, 
@@ -24,7 +28,14 @@ makePiezoTensor(double e15, double e22, double e31, double e33){
 }
 
 MaterialTensor 
-makeMaterialTensor(double c11, double c12, double c13, double c14, double c33, double c44, double c66){
+makeMaterialTensor(const double* cfmat){
+  double c11 = cfmat[0]; 
+  double c12 = cfmat[1];
+  double c13 = cfmat[2];
+  double c14 = cfmat[3];
+  double c33 = cfmat[4];
+  double c44 = cfmat[5];
+  double c66 = cfmat[6];
   MaterialTensor ret;
   double mtc[6][6] = {{c11, c12, c13, c14, 0, 0}, 
 		      {c12, c11, c13, -c14, 0, 0}, 
@@ -43,7 +54,9 @@ makeMaterialTensor(double c11, double c12, double c13, double c14, double c33, d
 }
 
 Matrix3 
-makeEpsilonTensor(double eps11, double eps33){
+makeEpsilonTensor(const double* cfeps){
+  double eps11 = cfeps[0];
+  double eps33 = cfeps[1];
   Matrix3 ret;
   double eps0 = 8.8542e-12;
   double epstc[3][3] = {{eps0*eps11, 0, 0}, 

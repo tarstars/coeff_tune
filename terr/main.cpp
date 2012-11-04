@@ -19,6 +19,14 @@ typedef vector<NVels> VNVels;
 int np, nq;
 vector<double> phi, theta;
 
+VNVels nvels_exp;
+VNVels nvels_num;
+double discrepancy;
+
+double cfmat[7] = {19.886e10, 5.467e10, 6.799e10, 0.783e10, 23.418e10, 5.985e10, 7.209e10}; //Material tenzor parameters
+double cfpiezo[4] = {3.655, 2.407, 0.328, 1.894}; //Piezo tenzor parameters
+double cfeps[2] = {44.9, 26.7}; //Relative permittivity
+
 /*
 void testReadFile(){
   ifstream sour("..\\linbo3_data\\linbo3_fqs_25c_sw.txt");
@@ -177,7 +185,7 @@ VNVels extract_data(){
 }
 
 //Velocities calculation function
-VNVels calculate_nvels(const vector<double>& phi, const vector<double>& theta)
+VNVels calculate_nvels(const vector<double>& phi, const vector<double>& theta, const double* cfmat, const double* cfpiezo, const double* cfeps)
 {
   VNVels ret;
   double rho =4642.8;
@@ -185,14 +193,14 @@ VNVels calculate_nvels(const vector<double>& phi, const vector<double>& theta)
   double vel1, vel2, vel3;
   double minvel, medvel, maxvel;
 
-  PiezoTensor pt=makePiezoTensor(3.655, 2.407, 0.328, 1.894);
+  MaterialTensor mt = makeMaterialTensor(cfmat);
+  //cout << "Material tensor:" << endl << mt << endl;
+
+  PiezoTensor pt=makePiezoTensor(cfpiezo);
   //PiezoTensor pt=makePiezoTensor(0, 0, 0, 0);
   //cout << "Piezo tensor:" << endl << pt << endl;
 
-  MaterialTensor mt = makeMaterialTensor(19.886e10, 5.467e10, 6.799e10, 0.783e10, 23.418e10, 5.985e10, 7.209e10);
-  //cout << "Material tensor:" << endl << mt << endl;
-
-  Matrix3 et = makeEpsilonTensor(44.9, 26.7);
+  Matrix3 et = makeEpsilonTensor(cfeps);
   //cout << "Epsilon tensor:" << endl << et <<endl;
 
   for(int p = 0; p < np; ++p){
@@ -229,15 +237,32 @@ VNVels calculate_nvels(const vector<double>& phi, const vector<double>& theta)
   return ret;
 }
 
+double get_discrepancy(const VNVels& nvels_exp, const VNVels& nvels_num)
+{
+  double ret = 0;
+  
+  for(unsigned int r = 0; r < nvels_exp.size(); ++r){
+    ret += 
+      pow((nvels_num[r].second(0) - nvels_exp[r].second(0)), 2) + 
+      pow((nvels_num[r].second(1) - nvels_exp[r].second(1)), 2) +
+      pow((nvels_num[r].second(2) - nvels_exp[r].second(2)), 2);
+  }
+  return ret;
+}
+
 int main()
 {
   cout << "Hello and welcome to Aperture Science Enrichment Center's" << endl << "Cute Piezocrystal's Acoustic Waves Speed Finder!" << endl << endl;
-  //work();
-  // testReadFile();
-  VNVels nvels_exp = extract_data();
-  VNVels nvels_num = calculate_nvels(phi, theta);
+
+  nvels_exp = extract_data();
+  nvels_num = calculate_nvels(phi, theta, cfmat, cfpiezo, cfeps);
+  
+  //Print nvels comparison
+  /*
   for(int r = 0; r < nvels_exp.size(); ++r){
     cout << "Exp: " << nvels_exp[r].first << "\t" << nvels_exp[r].second << endl;
     cout << "Num: " << nvels_num[r].first << "\t" << nvels_num[r].second << endl;
-  }
+  }*/
+  discrepancy = get_discrepancy(nvels_exp, nvels_num);
+  cout << "Discrepancy = " << discrepancy << endl;
 }
