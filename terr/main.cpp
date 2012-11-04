@@ -15,7 +15,11 @@ using namespace std;
 typedef pair<Vector3, Vector3> NVels;
 typedef vector<NVels> VNVels;
 
+//Global variables declaration.
+int np, nq;
+vector<double> phi, theta;
 
+/*
 void testReadFile(){
   ifstream sour("..\\linbo3_data\\linbo3_fqs_25c_sw.txt");
   int np = 0, nq = 0;
@@ -83,7 +87,9 @@ void testReadFile(){
     cout << endl;
   }
  }
+*/
 
+//Textbook data extraction
 VNVels extract_data(){
   ifstream sour1("..\\linbo3_data\\linbo3_ql_0c_sw.txt");
   ifstream sour2("..\\linbo3_data\\linbo3_sqs_0c_sw.txt");
@@ -106,12 +112,9 @@ VNVels extract_data(){
   
   if(np1 != np2 || np1 != np3 || np2 != np3 || nq1 != nq2 || nq1 != nq3 || nq2 != nq3){
     cout << "Different data sheets formats." << endl;}
-  int np = np1; 
-  int nq = nq1;
-   
-   
-  vector<double> phi;
-  vector<double> theta;
+  np = np1; 
+  nq = nq1;
+  
   double val1, val2, val3;
   double minvel, medvel, maxvel;
 
@@ -128,9 +131,7 @@ VNVels extract_data(){
     else{
       cout << "Different phi angles in data sheets." << endl; 
     }
-    //cout << phi.back() << " ";
   }
-  //cout << endl << "Phi size: " << phi.size() << endl;
   
   for(int p = 0; p < np; ++p){
     sour1 >> val1;
@@ -143,8 +144,7 @@ VNVels extract_data(){
     else{
       cout << "Different theta angles in data sheets." << endl; 
     }
-    //cout << theta.back() << " ";
-    
+  
     for(int q = 0; q < nq; ++q){
         sour1 >> val1;
 	sour2 >> val2;
@@ -158,40 +158,33 @@ VNVels extract_data(){
 	Vector3 vels = makeWaveVector(minvel, medvel, maxvel);
 	
 	ret.push_back(make_pair(n, vels));
-	cout << ret.back().first << "\t" << ret.back().second << endl;
+	// cout << ret.back().first << "\t" << ret.back().second << endl;
     }
   }
-  //cout << endl << "Theta size: " << theta.size() << endl;
-   /*
-   for(int p = 0; p < np+1; ++p){
-     for(int q = 0; q < nq+1; ++q){
-       sour1 >> val1;
-       sour2 >> val2;
-       sour3 >> val3;
-       if (p == 0){
-	 phi1.push_back(val1);
-	 phi2.push_back(val2);
-	 phi3.push_back(val3);
-	 cout << phi1.back() << endl;
-	 
-	 if (q == nq){p = 1; q = 0;}
-       }
-       //cout << phi1.size() << endl;
-       if (q == 0 && p != 0){
-	 theta1.push_back(val1);
-	 theta2.push_back(val2);
-	 theta3.push_back(val3);
-       }
-       else{
-	 //vel[p-1][q-1] = val;
-       }
-     }
-   }*/
-   return ret;
+
+  cout <<  "Phi (size  " << phi.size() <<"):" << endl;
+  for(int q = 0; q < nq; ++q){
+    cout << phi[q]*180/M_PI << " ";
+  }
+  cout << endl;
+  cout <<  "Theta (size  " << theta.size() <<"):" << endl;
+  for(int p = 0; p < np; ++p){
+    cout << theta[p]*180/M_PI << " ";
+  }
+  cout << endl;
+
+  return ret;
 }
 
-void work()
+//Velocities calculation function
+VNVels calculate_nvels(const vector<double>& phi, const vector<double>& theta)
 {
+  VNVels ret;
+  double rho =4642.8;
+  double r1, r2, r3;
+  double vel1, vel2, vel3;
+  double minvel, medvel, maxvel;
+
   PiezoTensor pt=makePiezoTensor(3.655, 2.407, 0.328, 1.894);
   //PiezoTensor pt=makePiezoTensor(0, 0, 0, 0);
   //cout << "Piezo tensor:" << endl << pt << endl;
@@ -202,45 +195,38 @@ void work()
   Matrix3 et = makeEpsilonTensor(44.9, 26.7);
   //cout << "Epsilon tensor:" << endl << et <<endl;
 
+  for(int p = 0; p < np; ++p){
+    for(int q = 0; q < nq; ++q){
+      Vector3 n = makeWaveVector(sin(theta[p])*cos(phi[q]), sin(theta[p])*sin(phi[q]), cos(theta[p]));
+      // cout << "Wave vector:" << endl << n <<endl;
+
+      Matrix3 chr = makePiezoChristoffel(mt, pt, et, n);
+      //cout << "Christoffel matrix:" << endl << chr << endl;
+
+      Poly3 chrpoly = chr.getCharPoly();
+      //cout << "Characteristic polynomial of Christoffel matrix:" << endl << chrpoly << endl << endl;
+      chrpoly.solve(&r1, &r2, &r3);
   
-  double phi = 0;
-  double theta = 0;
-  
-  cout << "Please, input phi angle [degrees]:" << endl;
-  cin >> phi;
-  phi = phi * M_PI / 180;
+      vel1 = sqrt(r1 / rho);
+      vel2 = sqrt(r2 / rho);
+      vel3 = sqrt(r3 / rho);
 
-  cout << "Please, input theta angle [degrees]:" << endl;
-  cin >> theta;
-  theta = theta * M_PI / 180;
-  
-  Vector3 n = makeWaveVector(sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta));
-  cout << "Wave vector:" << endl << n <<endl;
+      maxvel = max(max(vel1, vel2), vel3);
+      minvel = min(min(vel1, vel2), vel3);
+      medvel = vel1 + vel2 + vel3 - maxvel - minvel;
+	
+      Vector3 vels = makeWaveVector(minvel, medvel, maxvel);
+	
+      ret.push_back(make_pair(n, vels));
+      // cout << ret.back().first << "\t" << ret.back().second << endl;
 
-  //Vector3 n = makeWaveVector(1/sqrt(2), 1/sqrt(2), 0);
-  //cout << "Wave vector:" << endl << n <<endl;
-
-  Matrix3 chr = makePiezoChristoffel(mt, pt, et, n);
-  cout << "Christoffel matrix:" << endl << chr << endl;
-
-  Poly3 chrpoly = chr.getCharPoly();
-  cout << "Characteristic polynomial of Christoffel matrix:" << endl << chrpoly << endl << endl;
-
-  double rho =4642.8;
-  double r1, r2, r3;
-  double v1, v2, v3;
-
-  chrpoly.solve(&r1, &r2, &r3);
-  
-  v1 = sqrt(r1 / rho);
-  v2 = sqrt(r2 / rho);
-  v3 = sqrt(r3 / rho);
-
-  cout << "Velocity 1 = " << v1 << " [m/sec];" << endl;
-  cout << "Velocity 2 = " << v2 << " [m/sec];" << endl; 
-  cout << "Velocity 3 = " << v3 << " [m/sec];" << endl;
-
-  cout << endl << "Cake is waiting for you!" << endl;
+      // cout << "Velocity 1 = " << vel1 << " [m/sec];" << endl;
+      // cout << "Velocity 2 = " << vel2 << " [m/sec];" << endl; 
+      // cout << "Velocity 3 = " << vel3 << " [m/sec];" << endl;
+    }
+  }
+  // cout << endl << "Cake is waiting for you!" << endl;
+  return ret;
 }
 
 int main()
@@ -248,5 +234,10 @@ int main()
   cout << "Hello and welcome to Aperture Science Enrichment Center's" << endl << "Cute Piezocrystal's Acoustic Waves Speed Finder!" << endl << endl;
   //work();
   // testReadFile();
-  extract_data();
+  VNVels nvels_exp = extract_data();
+  VNVels nvels_num = calculate_nvels(phi, theta);
+  for(int r = 0; r < nvels_exp.size(); ++r){
+    cout << "Exp: " << nvels_exp[r].first << "\t" << nvels_exp[r].second << endl;
+    cout << "Num: " << nvels_num[r].first << "\t" << nvels_num[r].second << endl;
+  }
 }
