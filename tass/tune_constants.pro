@@ -9,7 +9,8 @@ INCLUDEPATH += .
 #QMAKE_CXXFLAGS += -std=c++0x
 
 # Input
-HEADERS += piezo_tensor.h\
+HEADERS += coeffs.h\
+           piezo_tensor.h\
            util.h\
            material_tensor.h\
            vec3.h\
@@ -17,7 +18,8 @@ HEADERS += piezo_tensor.h\
            poly3.h\
            types.h
 
-SOURCES += main.cpp\
+SOURCES += coeffs.cpp\
+           main.cpp\
            piezo_tensor.cpp\
            material_tensor.cpp\
            util.cpp\

@@ -4,4 +4,7 @@
 void
 testResidual();
 
+void 
+testAnneal();
+
 #endif

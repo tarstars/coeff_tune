@@ -1,7 +1,9 @@
 #include <cmath>
 #include <fstream>
 #include <string>
+#include <cstdlib>
 
+#include "coeffs.h"
 #include "util.h"
 #include "piezo_tensor.h"
 #include "material_tensor.h"
@@ -219,3 +221,43 @@ double residual(const VNVels& vnv) {
 
   return ret;
 }
+
+
+Coeffs anneal() {
+  Coeffs ret;
+
+  //cout << "initial value " << ret << endl;
+
+  VNVels vecs = readFiles("../linbo3_data/linbo3_sqs_0c_sw.txt",
+			  "../linbo3_data/linbo3_ql_0c_sw.txt",
+			  "../linbo3_data/linbo3_fqs_0c_sw.txt"
+			  );
+
+  const int maxIter = 100000;
+  int iterMeter = 0;
+  double kt = 1;
+
+  for(; iterMeter < maxIter; ++iterMeter) {
+    Coeffs nextPos(ret);
+    nextPos.vary(kt);
+    
+    double resOld = ret.residual(vecs);
+    double resNew = nextPos.residual(vecs);
+    
+    double delta = resNew - resOld;
+
+    double thresh = exp(-delta / kt);
+
+    double rv = double(rand()) / RAND_MAX;
+
+    if (rv < thresh) {
+      ret = nextPos;
+      cout /*<< "accepted: "*/ << iterMeter << " " << resNew << endl; // " " << ret << endl;
+    } else {
+      //cout << "declined: " << resNew << endl; // " " << ret << nextPos << endl;
+    }
+  }
+
+  return ret;
+}
+
