@@ -6,7 +6,7 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += .
 INCLUDEPATH += .
-QMAKE_CXXFLAGS += -std=c++0x
+#QMAKE_CXXFLAGS += -std=c++0x
 
 # Input
 HEADERS += piezo_tensor.h\
@@ -14,7 +14,8 @@ HEADERS += piezo_tensor.h\
            material_tensor.h\
            vec3.h\
            mat3.h\
-           poly3.h
+           poly3.h\
+           types.h
 
 SOURCES += main.cpp\
            piezo_tensor.cpp\
@@ -22,4 +23,5 @@ SOURCES += main.cpp\
            util.cpp\
            vec3.cpp\
            mat3.cpp\
-           poly3.cpp
+           poly3.cpp\
+           tests.cpp
