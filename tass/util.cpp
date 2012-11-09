@@ -233,7 +233,7 @@ Coeffs anneal() {
 			  "../linbo3_data/linbo3_fqs_0c_sw.txt"
 			  );
 
-  const int maxIter = 10000;
+  const int maxIter = 100000;
   int iterMeter = 0;
   double kt = 1;
 
@@ -252,9 +252,9 @@ Coeffs anneal() {
 
     if (rv < thresh) {
       ret = nextPos;
-      cout << "accepted: " << resNew << endl; // " " << ret << endl;
+      cout /*<< "accepted: "*/ << iterMeter << " " << resNew << endl; // " " << ret << endl;
     } else {
-      cout << "declined: " << resNew << endl; // " " << ret << nextPos << endl;
+      //cout << "declined: " << resNew << endl; // " " << ret << nextPos << endl;
     }
   }
 

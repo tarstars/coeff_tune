@@ -73,5 +73,6 @@ testResidual() {
 
 void
 testAnneal() {
-  cout << anneal() << endl;
+  anneal();
+  //cout << anneal() << endl;
 }
