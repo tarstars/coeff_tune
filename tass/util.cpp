@@ -225,13 +225,15 @@ double residual(const VNVels& vnv) {
 
 Coeffs anneal() {
   Coeffs ret;
+
+  //cout << "initial value " << ret << endl;
+
   VNVels vecs = readFiles("../linbo3_data/linbo3_sqs_0c_sw.txt",
 			  "../linbo3_data/linbo3_ql_0c_sw.txt",
 			  "../linbo3_data/linbo3_fqs_0c_sw.txt"
 			  );
 
-
-  const int maxIter = 10;
+  const int maxIter = 10000;
   int iterMeter = 0;
   double kt = 1;
 
@@ -250,9 +252,9 @@ Coeffs anneal() {
 
     if (rv < thresh) {
       ret = nextPos;
-      cout << "accepted: " << resNew << " " << ret << endl;
+      cout << "accepted: " << resNew << endl; // " " << ret << endl;
     } else {
-      cout << "declined: " << resNew << " " << ret << nextPos << endl;
+      cout << "declined: " << resNew << endl; // " " << ret << nextPos << endl;
     }
   }
 

@@ -11,11 +11,18 @@ Coeffs::Coeffs() : c11(10), c12(10), c13(10), c14(10), c33(10),
 }
 
 int
-Coeffs::coeffNum() {return 11;}
+Coeffs::coeffNum() const{return 11;}
 
 double&
 Coeffs::at(int ind) {
   double *pEl[] = {&c11, &c12, &c13, &c14, &c33, &c44, &c66,
+		   &e15, &e22, &e31, &e33};
+  return *(pEl[ind]);
+}
+
+const double&
+Coeffs::at(int ind) const {
+  const double *pEl[] = {&c11, &c12, &c13, &c14, &c33, &c44, &c66,
 		   &e15, &e22, &e31, &e33};
   return *(pEl[ind]);
 }
@@ -37,7 +44,7 @@ Coeffs::residual(const VNVels&) {
 
   for(int t = 0; t < coeffNum(); ++t) {
     double x = 10 + 2 * t;
-    double dx = x - at[t];
+    double dx = x - at(t);
     ret += dx * dx;
   }
 
@@ -46,6 +53,9 @@ Coeffs::residual(const VNVels&) {
 
 std::ostream& 
 operator<<(std::ostream& os, const Coeffs& r) {
+  for(int t = 0; t < r.coeffNum(); ++t) {
+    os << r.at(t) << " ";
+  }
 
   return os;
 }
