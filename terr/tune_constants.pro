@@ -7,6 +7,7 @@ TARGET =
 DEPENDPATH += .
 INCLUDEPATH += d:/Programming/GnuWin32/include/
 LIBS += -Ld:/Programming/GnuWin32/bin/ -lgsl -lgslcblas
+QMAKE_CXXFLAGS += std=c++11
 
 # Input
 HEADERS += piezo_tensor.h material_tensor.h matrix3.h vector3.h poly3.h util.h
