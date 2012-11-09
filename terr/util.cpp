@@ -3,13 +3,16 @@
 #include "material_tensor.h"
 #include "matrix3.h"
 #include "vector3.h"
+#include <cstdlib>
+
+using namespace std;
 
 int magic[3][3] = {{0, 5, 4},
 		   {5, 1, 3},
 		   {4, 3, 2}};
 
-PiezoTensor 
-makePiezoTensor(const double* cfpiezo){
+PiezoTensor
+makePiezoTensor(const vector<double>& cfpiezo){
   double e15 = cfpiezo[0];
   double e22 = cfpiezo[1];
   double e31 = cfpiezo[2];
@@ -28,14 +31,14 @@ makePiezoTensor(const double* cfpiezo){
 }
 
 MaterialTensor 
-makeMaterialTensor(const double* cfmat){
-  double c11 = cfmat[0]; 
-  double c12 = cfmat[1];
-  double c13 = cfmat[2];
-  double c14 = cfmat[3];
-  double c33 = cfmat[4];
-  double c44 = cfmat[5];
-  double c66 = cfmat[6];
+makeMaterialTensor(const vector<double>& cfmat){
+  double c11 = cfmat[0]*1e10; 
+  double c12 = cfmat[1]*1e10;
+  double c13 = cfmat[2]*1e10;
+  double c14 = cfmat[3]*1e10;
+  double c33 = cfmat[4]*1e10;
+  double c44 = cfmat[5]*1e10;
+  double c66 = cfmat[6]*1e10;
   MaterialTensor ret;
   double mtc[6][6] = {{c11, c12, c13, c14, 0, 0}, 
 		      {c12, c11, c13, -c14, 0, 0}, 
@@ -54,7 +57,7 @@ makeMaterialTensor(const double* cfmat){
 }
 
 Matrix3 
-makeEpsilonTensor(const double* cfeps){
+makeEpsilonTensor(const vector<double>& cfeps){
   double eps11 = cfeps[0];
   double eps33 = cfeps[1];
   Matrix3 ret;
@@ -121,3 +124,17 @@ makePiezoChristoffel(const MaterialTensor& mtens,
   return ret;
 }
 
+pair<int, int> pickCoeff(){
+
+  pair<int, int> ret;
+
+  ret.first = rand()%3;
+  if(ret.first == 0)
+    ret.second = rand()%7;
+  else if(ret.first == 1)
+    ret.second = rand()%4;
+  else if(ret.first == 2)
+    ret.second = rand()%2;
+  
+  return ret;
+}

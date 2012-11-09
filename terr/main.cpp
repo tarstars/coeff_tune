@@ -2,6 +2,8 @@
 #include <fstream>
 #include <cmath>
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 
 #include "piezo_tensor.h"
 #include "material_tensor.h"
@@ -10,95 +12,37 @@
 #include "poly3.h"
 #include "util.h"
 
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_randist.h>
+
 using namespace std;
 
 typedef pair<Vector3, Vector3> NVels;
 typedef vector<NVels> VNVels;
 
-//Global variables declaration.
+//Global variables declaration and initialization.
 int np, nq;
 vector<double> phi, theta;
 
 VNVels nvels_exp;
 VNVels nvels_num;
-double discrepancy;
 
-double cfmat[7] = {19.886e10, 5.467e10, 6.799e10, 0.783e10, 23.418e10, 5.985e10, 7.209e10}; //Material tenzor parameters
-double cfpiezo[4] = {3.655, 2.407, 0.328, 1.894}; //Piezo tenzor parameters
-double cfeps[2] = {44.9, 26.7}; //Relative permittivity
+double init_discrepancy;
+double curr_discrepancy;
+double best_discrepancy;
 
-/*
-void testReadFile(){
-  ifstream sour("..\\linbo3_data\\linbo3_fqs_25c_sw.txt");
-  int np = 0, nq = 0;
-  cout << "np = " << np << " nq = " << nq << endl;
+double temperature = 33;
+int iter = 1000000;
 
-  if (!sour){
-    cout << "Problems with file open." << endl;
-    return;
-  }
-  else if (sour){
-    cout << "File one is ready." << endl;
-  }
-  sour >> np >> nq;
+vector<double> cfmat(7); //Initial material tenzor parameters [1e10]
+vector<double> cfpiezo(4);//Initial piezo tenzor parameters
+vector<double> cfeps(2);//Initial relative permittivity
 
-  cout << "np = " << np << " nq = " << nq << endl;
-  
-  double val;
-  vector<int>  phi;
-  vector<int>  theta;
-  double vel[19][13];
-  vector<NVels> ret;
+vector<vector<double> > coeffs;
 
-  for(int p = 0; p < np+1; ++p){
-    for(int q = 0; q < nq+1; ++q){
-      sour >> val;
-      if (p == 0){
-	phi.push_back(val);
-	if (q == nq){
-	  p = 1;
-	  q = 0;
-	  cout << "!" << endl;
-	}
-      }
-      if (q == 0 && p !=0){
-	theta.push_back(val);
-      }
-      else{
-	vel[p-1][q-1] = val;
-      }
-      
-      //Vector3 n = makeWaveVector(cos(3), sin(15), cos(18));
-      //Vector3 vel = makeWaveVector(1, 2, 3);
-      
-      
-      //ret.push_back(make_pair(n, vel));
-      //cout << val  << " ";
-      
-    }
-    // cout << endl << "return" << endl;
-  }
-  cout << "Phi array: ";
-  for(int q = 0; q < nq; ++q){
-    cout << phi[q] << " ";
-  }
-  cout << endl;
-  cout << "Theta array: ";
-  for(int p = 0; p < np; ++p){
-    cout << theta[p] << " ";
-  }
-  cout << endl;
-  for(int p = 0; p < np; ++p){
-    for(int q = 0; q < nq; ++q){
-      cout << vel[p][q] << " ";
-    }
-    cout << endl;
-  }
- }
-*/
 
 //Textbook data extraction
-VNVels extract_data(){
+VNVels extractData(){
   ifstream sour1("..\\linbo3_data\\linbo3_ql_0c_sw.txt");
   ifstream sour2("..\\linbo3_data\\linbo3_sqs_0c_sw.txt");
   ifstream sour3("..\\linbo3_data\\linbo3_fqs_0c_sw.txt");
@@ -185,7 +129,7 @@ VNVels extract_data(){
 }
 
 //Velocities calculation function
-VNVels calculate_nvels(const vector<double>& phi, const vector<double>& theta, const double* cfmat, const double* cfpiezo, const double* cfeps)
+VNVels calculateNVels(const vector<double>& phi, const vector<double>& theta, const vector<vector<double> >& coeffs)
 {
   VNVels ret;
   double rho =4642.8;
@@ -193,14 +137,14 @@ VNVels calculate_nvels(const vector<double>& phi, const vector<double>& theta, c
   double vel1, vel2, vel3;
   double minvel, medvel, maxvel;
 
-  MaterialTensor mt = makeMaterialTensor(cfmat);
+  MaterialTensor mt = makeMaterialTensor(coeffs[0]);
   //cout << "Material tensor:" << endl << mt << endl;
 
-  PiezoTensor pt=makePiezoTensor(cfpiezo);
+  PiezoTensor pt=makePiezoTensor(coeffs[1]);
   //PiezoTensor pt=makePiezoTensor(0, 0, 0, 0);
   //cout << "Piezo tensor:" << endl << pt << endl;
 
-  Matrix3 et = makeEpsilonTensor(cfeps);
+  Matrix3 et = makeEpsilonTensor(coeffs[2]);
   //cout << "Epsilon tensor:" << endl << et <<endl;
 
   for(int p = 0; p < np; ++p){
@@ -237,7 +181,7 @@ VNVels calculate_nvels(const vector<double>& phi, const vector<double>& theta, c
   return ret;
 }
 
-double get_discrepancy(const VNVels& nvels_exp, const VNVels& nvels_num)
+double getDiscrepancy(const VNVels& nvels_exp, const VNVels& nvels_num)
 {
   double ret = 0;
   
@@ -250,19 +194,99 @@ double get_discrepancy(const VNVels& nvels_exp, const VNVels& nvels_num)
   return ret;
 }
 
+vector<vector<double> > shiftCoeffs(vector<vector<double> >& coeffs, gsl_rng* generator, double temperature){
+
+  vector<vector<double> > ret;
+  pair<int, int> randy;
+  
+  ret = coeffs;
+  randy = pickCoeff();
+  ret[randy.first][randy.second] += ret[randy.first][randy.second]*gsl_ran_gaussian (generator, temperature);
+  
+  return ret;
+}
+
+vector<vector<double> > anneal(int iter, gsl_rng* generator, double temperature){
+
+  VNVels curr_nvels_num;
+  vector<vector<double> > curr_coeffs;
+  vector<vector<double> > best_coeffs;
+  double delta_exp;
+  double accept_prop;
+  
+  nvels_exp = extractData();
+  nvels_num = calculateNVels(phi, theta, coeffs);
+
+  init_discrepancy = getDiscrepancy(nvels_exp, nvels_num);
+  best_discrepancy = init_discrepancy;
+  best_coeffs = coeffs;
+  
+  for (int p = 0; p < iter; ++p){
+    curr_coeffs = shiftCoeffs(coeffs, generator, temperature);
+    curr_nvels_num = calculateNVels(phi, theta, curr_coeffs);
+    
+    curr_discrepancy = getDiscrepancy(nvels_exp, curr_nvels_num);
+    
+    delta_exp = exp(-(curr_discrepancy - best_discrepancy) / temperature);
+    accept_prop = gsl_ran_flat(generator, 0.0,1.0);
+    
+    if (delta_exp > accept_prop || best_discrepancy > curr_discrepancy){
+      best_coeffs = curr_coeffs;
+      best_discrepancy = curr_discrepancy;
+      temperature *= 1/log(p+1);
+    }
+    //  cout << "Best Discrepancy = " << best_discrepancy << "\t Current Discrepancy = " << curr_discrepancy << endl;
+  }
+  return best_coeffs;
+}
+
+
 int main()
 {
-  cout << "Hello and welcome to Aperture Science Enrichment Center's" << endl << "Cute Piezocrystal's Acoustic Waves Speed Finder!" << endl << endl;
+  srand(time(NULL));
+  int seed=rand();
 
-  nvels_exp = extract_data();
-  nvels_num = calculate_nvels(phi, theta, cfmat, cfpiezo, cfeps);
+  gsl_rng *generator = gsl_rng_alloc(gsl_rng_default);
+  gsl_rng_set(generator, seed);
+  
+  cfmat[0] = 19.886;
+  cfmat[1] = 5.467;
+  cfmat[2] = 6.799;
+  cfmat[3] = 0.783;
+  cfmat[4] = 23.418;
+  cfmat[5] = 5.985;
+  cfmat[6] = 7.209;
+
+  cfpiezo[0] = 3.655;
+  cfpiezo[1] = 2.407;
+  cfpiezo[2] = 0.328;
+  cfpiezo[3] = 1.894;
+
+  cfeps[0] = 44.9;
+  cfeps[1] = 26.7; 
+
+  coeffs.push_back(cfmat);
+  coeffs.push_back(cfpiezo);
+  coeffs.push_back(cfeps);
+
+  
+  cout << "Hello and welcome to Aperture Science Enrichment Center's" << endl << "Cute Piezocrystal's Parameters Finder!" << endl << endl;
+
+  // nvels_exp = extractData();
+  // nvels_num = calculateNVels(phi, theta, coeffs);
   
   //Print nvels comparison
-  /*
-  for(int r = 0; r < nvels_exp.size(); ++r){
+ /* for(unsigned int r = 0; r < nvels_exp.size(); ++r){
     cout << "Exp: " << nvels_exp[r].first << "\t" << nvels_exp[r].second << endl;
     cout << "Num: " << nvels_num[r].first << "\t" << nvels_num[r].second << endl;
-  }*/
-  discrepancy = get_discrepancy(nvels_exp, nvels_num);
-  cout << "Discrepancy = " << discrepancy << endl;
+    }*/
+ // init_discrepancy = getDiscrepancy(nvels_exp, nvels_num);
+  //cout << "Discrepancy = " << init_discrepancy << endl;
+  
+  vector<vector<double> > best_coeffs = anneal(iter, generator, temperature);
+  VNVels best_nvels_num = calculateNVels(phi, theta, best_coeffs);
+  best_discrepancy = getDiscrepancy(nvels_exp, best_nvels_num);
+  cout << "Discrepancy = " << best_discrepancy << endl;
+  
+  gsl_rng_free(generator);
 }
