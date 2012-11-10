@@ -11,27 +11,34 @@
 
 using namespace std;
 
+/*
+20.3785e+10 5.7639e+10 7.53806e+10 
+0.853652e+10 24.3127e+10 5.97888e+10
+7.30946e+10 3.92587 2.5424 0.253666
+1.37925 48.2577 30.4561
+ */
+
 Coeffs::Coeffs() : c11(19.886e10), c12(5.467e10),  c13(6.799e10),
 		   c14(0.783e10),  c33(23.418e10), c44(5.985e10),
 		   c66(7.209e10), e15(3.655), e22(2.407), e31(0.328), 
-		   e33(1.894) {
+		   e33(1.894), exxc(44.9), ezzc(26.7) {
   
 }
 
 int
-Coeffs::coeffNum() const{return 11;}
+Coeffs::coeffNum() const{return 13;}
 
 double&
 Coeffs::at(int ind) {
   double *pEl[] = {&c11, &c12, &c13, &c14, &c33, &c44, &c66,
-		   &e15, &e22, &e31, &e33};
+		   &e15, &e22, &e31, &e33, &exxc, &ezzc};
   return *(pEl[ind]);
 }
 
 const double&
 Coeffs::at(int ind) const {
   const double *pEl[] = {&c11, &c12, &c13, &c14, &c33, &c44, &c66,
-		   &e15, &e22, &e31, &e33};
+			 &e15, &e22, &e31, &e33, &exxc, &ezzc};
   return *(pEl[ind]);
 }
 
@@ -62,8 +69,8 @@ Coeffs::residual(const VNVels& vnv) {
 
   double rho = 4642.8;
   double eps0 = 8.8542e-12;
-  double exx = eps0 * 44.9;
-  double ezz = eps0 * 26.7;
+  double exx = eps0 * exxc;
+  double ezz = eps0 * ezzc;
   
   for(VNVels::const_iterator it = vnv.begin(); it != vnv.end(); ++it) {
     Vec3 n(it -> first);

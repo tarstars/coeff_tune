@@ -7,6 +7,7 @@
 class Coeffs {
   double c11, c12, c13, c14, c33, c44, c66;
   double e15, e22, e31, e33;
+  double exxc, ezzc;
 
   const double& at(int)const;
   double& at(int);

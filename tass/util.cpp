@@ -233,7 +233,7 @@ Coeffs anneal() {
 			  "../linbo3_data/linbo3_fqs_0c_sw.txt"
 			  );
 
-  const int maxIter = 100000;
+  const int maxIter = 1000000;
   int iterMeter = 0;
   double kt = 1;
 
