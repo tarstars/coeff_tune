@@ -44,7 +44,7 @@ Coeffs::at(int ind) const {
 
 void
 Coeffs::vary(double kt) {
-  double partToVary = 0.0001;
+  double partToVary = 0.001 * pow(10, -kt);
 
   for(int t = 0; t < coeffNum(); ++t) {
     double rv = double(rand()) / RAND_MAX;
@@ -95,11 +95,12 @@ Coeffs::residual(const VNVels& vnv) {
     ret += curResidual;
   }
 
-  return ret;
+  return ret/vnv.size();
 }
 
 std::ostream& 
 operator<<(std::ostream& os, const Coeffs& r) {
+
   for(int t = 0; t < r.coeffNum(); ++t) {
     os << r.at(t) << " ";
   }
