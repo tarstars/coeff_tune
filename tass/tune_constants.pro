@@ -6,7 +6,7 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += .
 INCLUDEPATH += .
-#QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXXFLAGS += -O3
 
 # Input
 HEADERS += coeffs.h\

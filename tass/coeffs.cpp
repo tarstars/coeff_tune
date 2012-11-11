@@ -12,10 +12,11 @@
 using namespace std;
 
 /*
-20.3785e+10 5.7639e+10 7.53806e+10 
-0.853652e+10 24.3127e+10 5.97888e+10
-7.30946e+10 3.92587 2.5424 0.253666
-1.37925 48.2577 30.4561
+999777 1.64349
+2.03685e+011 5.75795e+010 7.51035e+010 
+8.52658e+009 2.42839e+011 5.97913e+010
+7.3132e+010 3.87359 2.51145 0.289444
+1.40349 47.0199 30.3427 
  */
 
 Coeffs::Coeffs() : c11(19.886e10), c12(5.467e10),  c13(6.799e10),
@@ -44,7 +45,7 @@ Coeffs::at(int ind) const {
 
 void
 Coeffs::vary(double kt) {
-  double partToVary = 0.001 * pow(10, -kt);
+  double partToVary = 0.0001;// * pow(10, -kt);
 
   for(int t = 0; t < coeffNum(); ++t) {
     double rv = double(rand()) / RAND_MAX;
@@ -62,7 +63,6 @@ Coeffs::residual(const VNVels& vnv) {
   //   double dx = x - at(t);
   //   ret += dx * dx;
   // }
-
 
   PiezoTensor pt = makePiezoTensor(e15, e22, e31, e33);
   MaterialTensor mt = makeMaterialTensor(c11, c12, c13, c14, c33, c44, c66);

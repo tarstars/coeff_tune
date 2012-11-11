@@ -236,7 +236,7 @@ Coeffs anneal() {
   const int maxIter = 1000000;
 
   for(int iterMeter = 0; iterMeter < maxIter; ++iterMeter) {
-    double kt = double(iterMeter)/100000; 
+    double kt = 0.001; 
 
     Coeffs nextPos(ret);
     nextPos.vary(kt);
@@ -246,7 +246,7 @@ Coeffs anneal() {
     
     double delta = resNew - resOld;
 
-    double thresh = pow(10, -delta / kt);
+    double thresh = exp(-delta / kt);
 
     double rv = double(rand()) / RAND_MAX;
 
