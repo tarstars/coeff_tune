@@ -68,7 +68,10 @@ testResidual() {
 			  "../linbo3_data/linbo3_fqs_0c_sw.txt"
 			  );
 
-  cout << residual(vecs) << endl;
+  Coeffs dat;
+  cout << "coeffs: " << dat << endl;
+
+  cout << dat.residual(vecs) << endl;
 }
 
 void
