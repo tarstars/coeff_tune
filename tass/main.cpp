@@ -24,6 +24,7 @@ int main() {
   try {
     //testResidual();
     testAnneal();
+    //testCoeffs();
   } catch (string msg) {
     cout << "error: " << msg << endl;
   }
