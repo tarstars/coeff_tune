@@ -236,15 +236,15 @@ Coeffs anneal() {
   double resOld = 0;
   bool resoldCalculated = false;
 
-  const int maxIter = 10000000;
+  const int maxIter = 100000;
 
   for(int iterMeter = 0; iterMeter < maxIter; ++iterMeter) {
     //cout << "cycle begins" << endl;
-    double kt = 0.0000001; 
+    double kt = 0.000000001; 
 
     Coeffs nextPos(ret);
     nextPos.vary(kt);
-    //nextPos.truncate();
+    nextPos.truncate();
 
     //cout << "\tret = " << ret << endl;
     //cout << "\tnextPos = " << nextPos << endl;
