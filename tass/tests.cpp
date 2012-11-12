@@ -70,6 +70,9 @@ testResidual() {
 
   Coeffs dat;
   cout << "coeffs: " << dat << endl;
+  dat.pprint(cout);
+  cout << endl;
+  
 
   cout << dat.residual(vecs) << endl;
 }
@@ -77,5 +80,16 @@ testResidual() {
 void
 testAnneal() {
   //anneal();
-  cout << anneal() << endl;
+  anneal().pprint(cout);
+  cout << endl;
+}
+
+void
+testCoeffs() {
+  Coeffs dat;
+  dat.vary(0);
+
+  cout << "line: " << dat << endl;
+  dat.pprint(cout);
+  cout << endl;
 }

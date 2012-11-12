@@ -17,6 +17,8 @@ class Coeffs {
   Coeffs();
   void vary(double);
   double residual(const VNVels&);
+  void pprint(std::ostream&)const;
+  void truncate();
 
   friend std::ostream& operator<<(std::ostream&, const Coeffs&);
 };

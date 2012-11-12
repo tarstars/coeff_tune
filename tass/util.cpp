@@ -233,30 +233,52 @@ Coeffs anneal() {
 			  "../linbo3_data/linbo3_fqs_0c_sw.txt"
 			  );
 
-  const int maxIter = 10000;
+  double resOld = 0;
+  bool resoldCalculated = false;
+
+  const int maxIter = 10000000;
 
   for(int iterMeter = 0; iterMeter < maxIter; ++iterMeter) {
-    double kt = 1; 
+    //cout << "cycle begins" << endl;
+    double kt = 0.0000001; 
 
     Coeffs nextPos(ret);
     nextPos.vary(kt);
+    //nextPos.truncate();
+
+    //cout << "\tret = " << ret << endl;
+    //cout << "\tnextPos = " << nextPos << endl;
     
-    double resOld = ret.residual(vecs);
-    double resNew = nextPos.residual(vecs);
     
-    double delta = resNew - resOld;
+    try { 
+      resOld = ret.residual(vecs);
+      resoldCalculated = true;
+    } catch (string) {}
 
-    double thresh = exp(-delta / kt);
+    try {
+      double resNew = nextPos.residual(vecs);
+      //cout << "\tresOld = " << resOld << endl;
+      //cout << "\tresNew = " << resNew << endl;
+    
+      if (resNew == resNew) {
 
-    double rv = double(rand()) / RAND_MAX;
+	double delta = resNew - resOld;
+      
+	double thresh = exp(-delta / kt);
+    
+	double rv = double(rand()) / RAND_MAX;
 
-    if (rv < thresh) {
-      ret = nextPos;
-      cout /*<< "accepted: "*/ << iterMeter << " " << resNew << " " << ret << endl;
-    } else {
-      //cout << "declined: " << resNew << endl; // " " << ret << nextPos << endl;
-    }
+	if (rv < thresh || !(resoldCalculated)) {
+	  ret = nextPos;
+	  cout /*<< "accepted: "*/ << iterMeter << " " << resNew << endl; // << " " << ret << endl;
+	} else {
+	  //cout << "declined: " << resNew << endl; // " " << ret << nextPos << endl;
+	}
+      }
+    } catch (string msg) {}
   }
+
+  cout << endl;
 
   return ret;
 }

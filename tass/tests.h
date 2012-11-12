@@ -7,4 +7,7 @@ testResidual();
 void 
 testAnneal();
 
+void
+testCoeffs();
+
 #endif
