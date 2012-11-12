@@ -12,32 +12,18 @@
 #include "poly3.h"
 #include "util.h"
 
-#include <gsl/gsl_rng.h>
-#include <gsl/gsl_randist.h>
-
 using namespace std;
 
 typedef pair<Vector3, Vector3> NVels;
 typedef vector<NVels> VNVels;
+typedef vector<vector<double> > Coeffs;
 
 //Global variables declaration and initialization.
 int np, nq;
 vector<double> phi, theta;
-
-VNVels nvels_exp;
-VNVels nvels_num;
-
-double best_discrepancy;
-
-double temperature = 33;
-int iter = 5000;
-
 vector<double> cfmat(7); //Initial material tenzor parameters [1e10]
 vector<double> cfpiezo(4);//Initial piezo tenzor parameters
-vector<double> cfeps(2) = {44.9, 26.7};//Initial relative permittivity
-
-vector<vector<double> > coeffs;
-
+vector<double> cfeps(2);//Initial relative permittivity
 
 //Textbook data extraction
 VNVels extractData(){
@@ -108,7 +94,6 @@ VNVels extractData(){
 	Vector3 vels = makeWaveVector(minvel, medvel, maxvel);
 	
 	ret.push_back(make_pair(n, vels));
-	// cout << ret.back().first << "\t" << ret.back().second << endl;
     }
   }
 
@@ -127,7 +112,7 @@ VNVels extractData(){
 }
 
 //Velocities calculation function
-VNVels calculateNVels(const vector<double>& phi, const vector<double>& theta, const vector<vector<double> >& coeffs)
+VNVels calculateNVels(const vector<double>& phi, const vector<double>& theta, const Coeffs& coeffs)
 {
   VNVels ret;
   double rho =4642.8;
@@ -190,74 +175,82 @@ double getDiscrepancy(const VNVels& nvels_exp, const VNVels& nvels_num)
     ret += a*a + b*b + c*c;
     //   cout << "a = " << a << " b = " << b << " c = " << c << " dscr = " << ret << endl;
   }
+  ret = ret/nvels_exp.size();
   return ret;
 }
 
-vector<vector<double> > shiftCoeffs(vector<vector<double> >& coeffs, gsl_rng* generator, double temperature){
+Coeffs shiftCoeffs(const Coeffs& coeffs){
 
-  vector<vector<double> > ret;
+  Coeffs ret;
   pair<int, int> randy;
-  
+  double partToVary = 0.01;
+  double rv = double(rand()) / RAND_MAX;
+  rv = 2 * (rv - 0.5);
+
   ret = coeffs;
   randy = pickCoeff();
-  ret[randy.first][randy.second] += ret[randy.first][randy.second]*gsl_ran_gaussian (generator, temperature);
+  ret[randy.first][randy.second] *= (1 + partToVary * rv);
   
   return ret;
 }
 
-vector<vector<double> > anneal(int iter, gsl_rng* generator, double temperature){
+VNVels nvels_exp;
+VNVels nvels_num;
+Coeffs coeffs;
 
-  VNVels curr_nvels_num;
-  vector<vector<double> > curr_coeffs;
-  vector<vector<double> > best_coeffs;
-  double init_discrepancy;
-  double curr_discrepancy;
+double temperature = 0.1;
+int iter = 10;
 
-  double delta_exp;
-  double accept_prop;
-  double delta;
-  
-  nvels_exp = extractData();
-  nvels_num = calculateNVels(phi, theta, coeffs);
+Coeffs anneal(int iter, double temperature){
+  nvels_exp = extractData();  
 
-  init_discrepancy = getDiscrepancy(nvels_exp, nvels_num);
-  best_discrepancy = init_discrepancy;
-  best_coeffs = coeffs;
-  
-  for (int p = 0; p < iter; ++p){
-    curr_coeffs = shiftCoeffs(best_coeffs, generator, temperature);
-    curr_nvels_num = calculateNVels(phi, theta, curr_coeffs);
+  Coeffs curr_coeffs = coeffs;
+  Coeffs best_coeffs = coeffs;
+  VNVels curr_nvels = calculateNVels(phi, theta, curr_coeffs);
+  double curr_discrepancy = getDiscrepancy(nvels_exp, curr_nvels);
+  double best_discrepancy = curr_discrepancy;
+  double energy;
+  double chance;
+  int counter = 0;
+
+  best_discrepancy = curr_discrepancy;
+  cout << "Initial discrepancy: " << best_discrepancy << endl;
+
+  for(int p = 0; p < iter; ++p){
+    curr_coeffs = shiftCoeffs(best_coeffs);
+    curr_nvels = calculateNVels(phi, theta, curr_coeffs);
+    curr_discrepancy = getDiscrepancy(nvels_exp, curr_nvels);
     
-    curr_discrepancy = getDiscrepancy(nvels_exp, curr_nvels_num);
-    //  printf("%lf \n", curr_discrepancy);
-    delta = (curr_discrepancy - best_discrepancy);
-    //cout << "Delta: " << delta << endl;
-    delta_exp = exp(- delta / temperature);
-    accept_prop = gsl_ran_flat(generator, 0.0,1.0);
-    
-    if (delta_exp > accept_prop || best_discrepancy > curr_discrepancy){
-      best_coeffs = curr_coeffs;
+    chance = double(rand())/RAND_MAX;
+    energy = exp(-(curr_discrepancy - best_discrepancy)/temperature);
+    cout  << "Best: " << best_discrepancy << "\tCurrent: " << curr_discrepancy  << "\tDelta: " << energy << "\tChance: " << chance;
+
+    if(energy > chance){
+      cout << "\tGG" << endl;
       best_discrepancy = curr_discrepancy;
-      temperature *= 1/log(p+1);
+      best_coeffs = curr_coeffs;
+      counter++;
     }
     else{
-      temperature *= 1/log(p+1);
+      cout << endl;
     }
-    //    cout << "Delta_exp: " << delta_exp << "\t Accept_prop: " << accept_prop << endl;
-    // cout << "Best Discrepancy = " << best_discrepancy << "\t Current Discrepancy = " << curr_discrepancy << endl;
+  }
+  cout << "Counter: " << counter << endl;
+  for(int p = 0; p < 3; ++p){
+    for(int q = 0; q < best_coeffs[p].size(); ++q){
+      if(p == 0){cout << "cfmat[" << q << "] = " << best_coeffs[p][q] << ";" << endl;}
+      if(p == 1){cout << "cfpiezo[" << q << "] = " << best_coeffs[p][q] << ";" << endl;}
+      if(p == 2){cout << "cfeps[" << q << "] = " << best_coeffs[p][q] << ";" << endl;}
+    }
   }
   return best_coeffs;
 }
 
-
 int main()
 {
   srand(time(NULL));
-  int seed=rand();
-
-  gsl_rng *generator = gsl_rng_alloc(gsl_rng_default);
-  gsl_rng_set(generator, seed);
-  
+  /*
+  //Kushibiki coeffs
   cfmat[0] = 19.886;
   cfmat[1] = 5.467;
   cfmat[2] = 6.799;
@@ -271,9 +264,58 @@ int main()
   cfpiezo[2] = 0.328;
   cfpiezo[3] = 1.894;
 
-  //  cfeps[0] = 44.9;
-  //cfeps[1] = 26.7; 
+  cfeps[0] = 44.9;
+  cfeps[1] = 26.7;
+  */
+cfmat[0] = 20.3772;
+cfmat[1] = 5.77351;
+cfmat[2] = 7.53455;
+cfmat[3] = 0.852367;
+cfmat[4] = 24.314;
+cfmat[5] = 5.98046;
+cfmat[6] = 7.30832;
+cfpiezo[0] = 3.90042;
+cfpiezo[1] = 2.52895;
+cfpiezo[2] = 0.251757;
+cfpiezo[3] = 1.37793;
+cfeps[0] = 47.6565;
+cfeps[1] = 30.2265;
+  /*  //Terrum' best
+  cfmat[0] = 20.4111;
+  cfmat[1] = 5.777339;
+  cfmat[2] = 7.36441;
+  cfmat[3] = 0.84533;
+  cfmat[4] = 23.9542;
+  cfmat[5] = 5.99331;
+  cfmat[6] = 7.30143;
 
+  cfpiezo[0] = 3.63674;
+  cfpiezo[1] = 2.34767;
+  cfpiezo[2] = 0.338447;
+  cfpiezo[3] = 1.65699;
+
+  cfeps[0] = 41.6584;
+  cfeps[1] = 30.0418;
+*/
+  /*
+    //Tarstars' best
+  cfmat[0] = 20.3777;
+  cfmat[1] = 5.76219;
+  cfmat[2] = 7.53698;
+  cfmat[3] = 0.853752;
+  cfmat[4] = 24.313;
+  cfmat[5] = 5.97846;
+  cfmat[6] = 7.30987;
+
+  cfpiezo[0] = 3.92559;
+  cfpiezo[1] = 2.54236;
+  cfpiezo[2] = 0.254881;
+  cfpiezo[3] = 1.37947;
+
+  cfeps[0] = 48.2537;
+  cfeps[1] = 30.4489;
+*/  
+  
   coeffs.push_back(cfmat);
   coeffs.push_back(cfpiezo);
   coeffs.push_back(cfeps);
@@ -281,21 +323,17 @@ int main()
   
   cout << "Hello and welcome to Aperture Science Enrichment Center's" << endl << "Cute Piezocrystal's Parameters Finder!" << endl << endl;
 
+  Coeffs best_coeffs = anneal(iter, temperature);
   // nvels_exp = extractData();
   // nvels_num = calculateNVels(phi, theta, coeffs);
   
   //Print nvels comparison
- /* for(unsigned int r = 0; r < nvels_exp.size(); ++r){
-    cout << "Exp: " << nvels_exp[r].first << "\t" << nvels_exp[r].second << endl;
-    cout << "Num: " << nvels_num[r].first << "\t" << nvels_num[r].second << endl;
-    }*/
- // init_discrepancy = getDiscrepancy(nvels_exp, nvels_num);
-  //cout << "Discrepancy = " << init_discrepancy << endl;
-  
-  vector<vector<double> > best_coeffs = anneal(iter, generator, temperature);
-  VNVels best_nvels_num = calculateNVels(phi, theta, best_coeffs);
-  best_discrepancy = getDiscrepancy(nvels_exp, best_nvels_num);
-  cout << "Discrepancy = " << best_discrepancy << endl;
-  
-  gsl_rng_free(generator);
+  // for(unsigned int r = 0; r < nvels_exp.size(); ++r){
+  //  cout << "Exp: " << nvels_exp[r].first << "\t" << nvels_exp[r].second << endl;
+  //  cout << "Num: " << nvels_num[r].first << "\t" << nvels_num[r].second << endl;
+  //  }
+  //  double init_discrepancy = getDiscrepancy(nvels_exp, nvels_num);
+  //  cout << "Discrepancy = " << init_discrepancy << endl;
+ 
+
 }
