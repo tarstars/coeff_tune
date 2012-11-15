@@ -1,8 +1,11 @@
 #include <iostream>
+#include <fstream>
 
 #include "piezo_tensor.h"
 #include "material_tensor.h"
+#include "vector.h"
 #include "matrix.h"
+#include "polynom.h"
 #include "util.h"
 
 #include <conio.h>
@@ -10,6 +13,16 @@
 #include <iostream>
 
 using namespace std;
+
+void test_read_file() {
+  ifstream sour("..\\linbo3_data\\linbo3_sqs_0c_sw.txt");
+
+  if (!sour){
+    cout << "problem!" << endl;
+  }
+
+  cout << "ok!" << endl;
+}
 
 void coeff_tune() {
 
@@ -21,21 +34,37 @@ void coeff_tune() {
 
   double rho = 4642.8;
 
-  Vector3 n = (0,0,1);
+  Vector3 n(1,0,0);
 
-  // Matrix3 christ = make_christ(n,pt,mt,eps);
+  Matrix3 christ = make_christ(n,pt,mt,eps);
 
-  // Pol3 charact = make_character(christ);
+  //cout << "pt = " << endl << pt << endl;
+  //cout << "mt = " << endl << mt << endl;
+  //cout << "eps = " << endl << eps << endl;
 
-  // double r1, r2, r3;
+  Poly3 charact = christ.getCharPoly();
 
-  // charact.all_roots(r1,r2,r3);
+  //Poly3 charact(1,-14,59,-70);
 
-  // double V1 = sqrt(r1/rho); 
+  cout << charact << endl;
+
+  double r1, r2, r3;
+
+  charact.solve(&r1, &r2, &r3);
+
+  double V1 = sqrt(r1/rho);
+  double V2 = sqrt(r2/rho);
+  double V3 = sqrt(r3/rho);
+
+  cout << r1 << " " << r2 << " " << r3 << endl;
+
+  cout << V1 << " " << V2 << " " << V3 << endl;
 }
 
 int main() {
   
+  //test_read_file();
+
   coeff_tune();
   
   getch();

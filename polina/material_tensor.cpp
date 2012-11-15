@@ -13,7 +13,7 @@ std::ostream& operator<<(std::ostream& os, const MaterialTensor& mtens)
     for(int r = 0; r < 3; ++r){
       for(int p = 0; p < 3; ++p){
 	for(int q = 0; q < 3; ++q){
-	  os << mtens(p, q, r, s) << endl;
+        os << mtens(p, q, r, s) << "\t";
 	}
 	os << endl;
       }

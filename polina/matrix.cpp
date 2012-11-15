@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "matrix.h"
+#include "polynom.h"
 
 using namespace std;
 
@@ -11,7 +12,7 @@ Poly3 Matrix3::getCharPoly()const{
   Poly3 ret(-1,  
 	    + m(0,0) + m(1,1) + m(2,2), 
 	    - m(0,0)*m(1,1) - m(0,0)*m(2,2) - m(1,1)*m(2,2) + m(0,1)*m(1,0) + m(0,2)*m(2,0) + m(1,2)*m(2,1), 
-	    - m(0,0)*m(1,2)*m(2,1) - m(1,1)*m(0,2)*m(2,0) - m(2,2)*m(0,1)*m(1,0) 
+        - m(0,0)*m(1,2)*m(2,1) - m(1,1)*m(0,2)*m(2,0) - m(2,2)*m(0,1)*m(1,0)
 	    + m(0,1)*m(1,2)*m(2,0) + m(0,2)*m(2,1)*m(1,0) + m(0,0)*m(1,1)*m(2,2));
   
   return ret;

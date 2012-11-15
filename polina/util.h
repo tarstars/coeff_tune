@@ -12,6 +12,8 @@ MaterialTensor make_material_tensor(double c11, double c12, double c13, double c
 
 Matrix3 make_permit(double e_xx, double e_zz);
 
+Matrix3 make_christ(const Vector3& n, const PiezoTensor& pt, const MaterialTensor& mt, const Matrix3& eps);
+
 Vector3 make_vector();
 
 #endif

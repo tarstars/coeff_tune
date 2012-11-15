@@ -1,6 +1,7 @@
 #include "util.h"
 #include "piezo_tensor.h"
 #include "material_tensor.h"
+#include "polynom.h"
 #include "matrix.h"
 #include "vector.h"
 
@@ -70,9 +71,14 @@ make_material_tensor(double c11,
 Matrix3 make_permit (double e_xx, double e_zz) {
   Matrix3 ret;
 	
+  double eps_0 = 8.854E-12;
+
+  e_xx *= eps_0;
+  e_zz *= eps_0;
+
   ret(0,0)=e_xx; ret(0,1)=0;	   ret(0,2)=0;
   ret(1,0)=0;    ret(1,1)= e_xx;   ret(1,2)=0;
-  ret(2,0)=0;	   ret(2,1)=0;	   ret(2,2)=e_zz;
+  ret(2,0)=0;	 ret(2,1)=0;	   ret(2,2)=e_zz;
 	
   return ret;
 }
@@ -83,6 +89,31 @@ Matrix3 make_christ (const Vector3& n,
 		     const Matrix3& eps) {
   Matrix3 ret;
 
-  
+  double etens=0;
+
+  for (int i=0; i<3; ++i) {
+      etens += eps(i,i)*n(i)*n(i);
+  }
+
+  for (int p=0; p<3; ++p) {
+      for (int q=0; q<3; ++q) {
+
+          double gamma_christ=0;
+          double gamma_p=0;
+          double gamma_q=0;
+
+          for (int r=0; r<3; ++r) {
+              for (int s=0; s<3; ++s) {
+
+                  gamma_christ += mt(p,q,r,s)*n(r)*n(s);
+                  gamma_p += pt(r,p,s)*n(r)*n(s);
+                  gamma_q += pt(r,q,s)*n(r)*n(s);
+              }
+          }
+
+          ret(p,q) = gamma_christ + gamma_p * gamma_q / etens;
+      }
+  }
   return ret;
 }
+
