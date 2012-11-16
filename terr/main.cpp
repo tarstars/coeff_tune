@@ -183,7 +183,7 @@ Coeffs shiftCoeffs(const Coeffs& coeffs){
 
   Coeffs ret;
   pair<int, int> randy;
-  double partToVary = 0.01;
+  double partToVary = 0.0001;
   double rv = double(rand()) / RAND_MAX;
   rv = 2 * (rv - 0.5);
 
@@ -198,7 +198,7 @@ VNVels nvels_exp;
 VNVels nvels_num;
 Coeffs coeffs;
 
-double temperature = 0.1;
+double temperature = 0.0000001;
 int iter = 10;
 
 Coeffs anneal(int iter, double temperature){
@@ -237,7 +237,7 @@ Coeffs anneal(int iter, double temperature){
   }
   cout << "Counter: " << counter << endl;
   for(int p = 0; p < 3; ++p){
-    for(int q = 0; q < best_coeffs[p].size(); ++q){
+    for(unsigned int q = 0; q < best_coeffs[p].size(); ++q){
       if(p == 0){cout << "cfmat[" << q << "] = " << best_coeffs[p][q] << ";" << endl;}
       if(p == 1){cout << "cfpiezo[" << q << "] = " << best_coeffs[p][q] << ";" << endl;}
       if(p == 2){cout << "cfeps[" << q << "] = " << best_coeffs[p][q] << ";" << endl;}
@@ -267,20 +267,49 @@ int main()
   cfeps[0] = 44.9;
   cfeps[1] = 26.7;
   */
-cfmat[0] = 20.3772;
-cfmat[1] = 5.77351;
-cfmat[2] = 7.53455;
-cfmat[3] = 0.852367;
-cfmat[4] = 24.314;
-cfmat[5] = 5.98046;
-cfmat[6] = 7.30832;
-cfpiezo[0] = 3.90042;
-cfpiezo[1] = 2.52895;
-cfpiezo[2] = 0.251757;
-cfpiezo[3] = 1.37793;
-cfeps[0] = 47.6565;
-cfeps[1] = 30.2265;
-  /*  //Terrum' best
+  cfmat[0] = 20.3811;
+  cfmat[1] = 5.76408;
+  cfmat[2] = 7.54739;
+  cfmat[3] = 0.85425;
+  cfmat[4] = 24.3244;
+  cfmat[5] = 5.97822;
+  cfmat[6] = 7.30852;
+  cfpiezo[0] = 4.1312;
+  cfpiezo[1] = 2.67444;
+  cfpiezo[2] = 0.252067;
+  cfpiezo[3] = 1.43387;
+  cfeps[0] = 53.4247;
+  cfeps[1] = 33.4012; 
+ /*
+  cfmat[0] = 20.3814;
+  cfmat[1] = 5.76431;
+  cfmat[2] = 7.54762;
+  cfmat[3] = 0.854336;
+  cfmat[4] = 24.3247;
+  cfmat[5] = 5.9782;
+  cfmat[6] = 7.30838;
+  cfpiezo[0] = 4.1312;
+  cfpiezo[1] = 2.67444;
+  cfpiezo[2] = 0.251738;
+  cfpiezo[3] = 1.43349;
+  cfeps[0] = 53.4246;
+  cfeps[1] = 33.3947;
+  */
+/* Terrum best
+  cfmat[0] = 20.3733;
+  cfmat[1] = 5.76002;
+  cfmat[2] = 7.52272;
+  cfmat[3] = 0.853238;
+  cfmat[4] = 24.2971;
+  cfmat[5] = 5.97872;
+  cfmat[6] = 7.31158;
+  cfpiezo[0] = 4.11959;
+  cfpiezo[1] = 2.6693;
+  cfpiezo[2] = 0.288409;
+  cfpiezo[3] = 1.47162;
+  cfeps[0] = 53.155;
+  cfeps[1] = 33.9506;*/
+  /*  //Terrum' second to best
   cfmat[0] = 20.4111;
   cfmat[1] = 5.777339;
   cfmat[2] = 7.36441;
@@ -295,8 +324,8 @@ cfeps[1] = 30.2265;
   cfpiezo[3] = 1.65699;
 
   cfeps[0] = 41.6584;
-  cfeps[1] = 30.0418;
-*/
+  cfeps[1] = 30.0418;*/
+
   /*
     //Tarstars' best
   cfmat[0] = 20.3777;
@@ -323,16 +352,16 @@ cfeps[1] = 30.2265;
   
   cout << "Hello and welcome to Aperture Science Enrichment Center's" << endl << "Cute Piezocrystal's Parameters Finder!" << endl << endl;
 
-  Coeffs best_coeffs = anneal(iter, temperature);
-  // nvels_exp = extractData();
-  // nvels_num = calculateNVels(phi, theta, coeffs);
+  // Coeffs best_coeffs = anneal(iter, temperature);
+  nvels_exp = extractData();
+  nvels_num = calculateNVels(phi, theta, coeffs);
   
   //Print nvels comparison
-  // for(unsigned int r = 0; r < nvels_exp.size(); ++r){
-  //  cout << "Exp: " << nvels_exp[r].first << "\t" << nvels_exp[r].second << endl;
-  //  cout << "Num: " << nvels_num[r].first << "\t" << nvels_num[r].second << endl;
-  //  }
-  //  double init_discrepancy = getDiscrepancy(nvels_exp, nvels_num);
+  for(unsigned int r = 0; r < nvels_exp.size(); ++r){
+    cout << "Exp: " << nvels_exp[r].first << "\t" << nvels_exp[r].second << endl;
+    cout << "Num: " << nvels_num[r].first << "\t" << nvels_num[r].second << endl;
+  }
+   //  double init_discrepancy = getDiscrepancy(nvels_exp, nvels_num);
   //  cout << "Discrepancy = " << init_discrepancy << endl;
  
 
