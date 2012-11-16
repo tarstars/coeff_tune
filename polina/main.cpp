@@ -39,14 +39,14 @@ void coeff_tune() {
   Matrix3 christ = make_christ(n,pt,mt,eps);
 
   //cout << "pt = " << endl << pt << endl;
-  //cout << "mt = " << endl << mt << endl;
+  cout << "mt = " << endl << mt << endl;
   //cout << "eps = " << endl << eps << endl;
 
   Poly3 charact = christ.getCharPoly();
 
   //Poly3 charact(1,-14,59,-70);
 
-  cout << charact << endl;
+  //cout << charact << endl;
 
   double r1, r2, r3;
 
