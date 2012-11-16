@@ -46,7 +46,7 @@ void coeff_tune() {
 
   //Poly3 charact(1,-14,59,-70);
 
-  cout << charact << endl;
+  //cout << charact << endl;
 
   double r1, r2, r3;
 
