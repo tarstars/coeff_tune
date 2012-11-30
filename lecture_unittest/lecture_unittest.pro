@@ -9,4 +9,5 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-SOURCES += testpoly.cpp
+SOURCES += testpoly.cpp poly.cpp
+HEADERS += poly.h
