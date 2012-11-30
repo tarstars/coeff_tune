@@ -1,0 +1,142 @@
+% This text is proprietary.
+% It's a part of presentation made by myself.
+% It may not used commercial.
+% The noncommercial use such as private and study is free
+% Sep. 2005 
+% Author: Sascha Frank 
+% University Freiburg 
+% www.informatik.uni-freiburg.de/~frank/
+% additional use of \usepackage{beamerthemesplit}
+
+
+\documentclass{beamer}
+\usepackage[utf8x]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{beamerthemesplit}
+
+\usepackage{listings}
+\lstset{breakatwhitespace,
+language=C++,
+columns=fullflexible,
+keepspaces,
+breaklines,
+tabsize=3, 
+showstringspaces=false,
+extendedchars=true,
+keywordstyle=\color{blue}\ttfamily,
+stringstyle=\color{red}\ttfamily,
+commentstyle=\color{green}\ttfamily,
+morecomment=[l][\color{magenta}]{\#}}
+
+\begin{document}
+\title{C++  для девочек :-)}
+\author{qq\texttrademark} 
+\date{\today}
+
+\defverbatim[colored]\lst{%
+\begin{lstlisting}[tabsize=8,basicstyle=\ttfamily]
+const char *processing() const{
+    somestring = "-1";
+}
+\end{lstlisting}
+}
+
+\frame{\titlepage} 
+
+\frame{\frametitle{<Оглавление>}\tableofcontents} 
+
+
+\section{Как здорово все начиналось...} 
+\frame{\frametitle{...} 
+When I find my code in tons of trouble,\\
+Friends and colleagues come to me,\\
+Speaking words of wisdom:\\
+"Write in C."
+}
+\subsection{Все было впервые и вновь...}
+\frame{
+\lst
+}
+
+
+\section{Lorem ipsum...} 
+\subsection{сПиСоК}
+\frame{\frametitle{unnumbered lists}
+\begin{itemize}
+\item Как выстрелить себе в ногу при помощи C++ и \LaTeX  
+\item *Курс для продвинутых
+\item Быдлокод
+\item BDD, TDD, Agile, XP и другие страшные слова
+\end{itemize} 
+}
+
+\frame{\frametitle{lists with pause}
+\begin{itemize}
+\item Introduction to  \LaTeX \pause 
+\item Course 2 \pause 
+\item Termpapers and presentations with \LaTeX \pause 
+\item Beamer class
+\end{itemize} 
+}
+
+\subsection{Lists II}
+\frame{\frametitle{numbered lists}
+\begin{enumerate}
+\item Introduction to  \LaTeX  
+\item Course 2 
+\item Termpapers and presentations with \LaTeX 
+\item Beamer class
+\end{enumerate}
+}
+\frame{\frametitle{numbered lists with pause}
+\begin{enumerate}
+\item Introduction to  \LaTeX \pause 
+\item Course 2 \pause 
+\item Termpapers and presentations with \LaTeX \pause 
+\item Beamer class
+\end{enumerate}
+}
+
+\section{Section no.3} 
+\subsection{Tables}
+\frame{\frametitle{Tables}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Date} & \textbf{Instructor} & \textbf{Title} \\
+\hline
+WS 04/05 & Sascha Frank & First steps with  \LaTeX  \\
+\hline
+SS 05 & Sascha Frank & \LaTeX \ Course serial \\
+\hline
+\end{tabular}}
+
+
+\frame{\frametitle{Tables with pause}
+\begin{tabular}{c c c}
+A & B & C \\ 
+\pause 
+1 & 2 & 3 \\  
+\pause 
+A & B & C \\ 
+\end{tabular} }
+
+
+\section{Section no. 4}
+\subsection{blocs}
+\frame{\frametitle{blocs}
+
+\begin{block}{title of the bloc}
+bloc text
+\end{block}
+
+\begin{exampleblock}{title of the bloc}
+bloc text
+\end{exampleblock}
+
+
+\begin{alertblock}{title of the bloc}
+bloc text
+\end{alertblock}
+}
+\end{document}
+
