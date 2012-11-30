@@ -8,11 +8,14 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += material_tensor.h matrix.h piezo_tensor.h polynom.h util.h vector.h
+HEADERS += material_tensor.h matrix.h piezo_tensor.h polynom.h util.h vector.h \
+    type.h \
+    coeffs.h
 SOURCES += main.cpp \
            material_tensor.cpp \
            matrix.cpp \
            piezo_tensor.cpp \
            polynom.cpp \
            util.cpp \
-           vector.cpp
+           vector.cpp \
+    coeffs.cpp
