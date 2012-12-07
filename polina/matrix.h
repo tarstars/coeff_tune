@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+class Poly3;
+
 class Matrix3{
   double dat[3][3];
  public:
