@@ -1,0 +1,152 @@
+\documentclass{beamer}
+\usepackage[utf8x]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{beamerthemesplit}
+
+\usepackage{color}
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{bggray}{rgb}{0.9,0.9,0.9}
+%	Параметры подсветки исходного кода на C++
+\usepackage{listings}
+\lstset{breakatwhitespace,
+	language=C++,
+	columns=fullflexible,
+	keepspaces,
+	breaklines,
+	tabsize=3,
+	numbers=left, % нумерация строк
+	numberstyle=\small\color{gray},
+	numbersep=5pt,
+	backgroundcolor=\color{bggray},
+	%backgroundcolor=\color{bggray},
+	showstringspaces=false,
+	extendedchars=true,
+	keywordstyle=\color{blue}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	commentstyle=\color{green}\ttfamily,
+	morecomment=[l][\color{magenta}]{\#}
+}
+
+\begin{document}
+	\title{Рассказ о спецкурсе "Численные методы в приложении к задачам акустооптики и акустоэлектроники на языке программирования С++"}
+	\author{...} 
+	\date{\today}
+
+	%	Пример листинга на C++, отступы, включая отступы от начала строки сохраняются (!)
+	\defverbatim[colored]\lst{
+	\begin{lstlisting}[tabsize=2,basicstyle=\ttfamily]
+	const char *processing() const{
+		somestring = "-1";
+	}
+	\end{lstlisting}}
+
+	%	Слайд-заголовок (#1)
+	\frame{\titlepage}
+	%	Слайд с содержанием презентации (#2)
+	\frame{\frametitle{Содержание}\tableofcontents} 
+
+
+	\section{Постановка задачи}
+	\frame{
+		\frametitle{...}
+		When I find my code in tons of trouble,\\
+		Friends and colleagues come to me,\\
+		Speaking words of wisdom:\\
+		"Write in C."
+	}
+		\subsection{1}
+		\subsection{2}
+		\subsection{3}
+		\frame{
+			%	Вставка листинга на C++
+			\frametitle{Пример кода на C++}
+			\lst
+		}
+
+
+\section{Подготовка экспериментальных данных}
+\frame{}
+\section{Подбор констант}
+	\subsection{Метод отжига}\frame{}
+	\subsection{Градиентный спуск}\frame{}
+%\frame{
+%\subsection{сПиСоК}
+%\frame{\frametitle{unnumbered lists}
+%\begin{itemize}
+%\item Как выстрелить себе в ногу при помощи C++ и \LaTeX  
+%\item *Курс для продвинутых
+%\item Быдлокод
+%\item BDD, TDD, Agile, XP и другие страшные слова
+%\end{itemize} 
+%}
+%
+%\frame{\frametitle{lists with pause}
+%\begin{itemize}
+%\item Introduction to  \LaTeX \pause 
+%\item Course 2 \pause 
+%\item Termpapers and presentations with \LaTeX \pause 
+%\item Beamer class
+%\end{itemize} 
+%}
+%
+%\subsection{Lists II}
+%\frame{\frametitle{numbered lists}
+%\begin{enumerate}
+%\item Introduction to  \LaTeX  
+%\item Course 2 
+%\item Termpapers and presentations with \LaTeX 
+%\item Beamer class
+%\end{enumerate}
+%}
+%\frame{\frametitle{numbered lists with pause}
+%\begin{enumerate}
+%\item Introduction to  \LaTeX \pause 
+%\item Course 2 \pause 
+%\item Termpapers and presentations with \LaTeX \pause 
+%\item Beamer class
+%\end{enumerate}
+%}
+
+%\section{Section no.3} 
+%\subsection{Tables}
+%\frame{\frametitle{Tables}
+%\begin{tabular}{|c|c|c|}
+%\hline
+%\textbf{Date} & \textbf{Instructor} & \textbf{Title} \\
+%\hline
+%WS 04/05 & Sascha Frank & First steps with  \LaTeX  \\
+%\hline
+%SS 05 & Sascha Frank & \LaTeX \ Course serial \\
+%\hline
+%\end{tabular}}
+%
+%
+%\frame{\frametitle{Tables with pause}
+%\begin{tabular}{c c c}
+%A & B & C \\ 
+%\pause 
+%1 & 2 & 3 \\  
+%\pause 
+%A & B & C \\ 
+%\end{tabular} }
+%
+%
+%\section{Section no. 4}
+%\subsection{blocs}
+%\frame{\frametitle{blocs}
+%
+%\begin{block}{title of the bloc}
+%bloc text
+%\end{block}
+%
+%\begin{exampleblock}{title of the bloc}
+%bloc text
+%\end{exampleblock}
+%
+%
+%\begin{alertblock}{title of the bloc}
+%bloc text
+%\end{alertblock}
+%}
+\end{document}
+
