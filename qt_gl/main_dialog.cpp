@@ -1,7 +1,9 @@
 #include <iostream>
 
 #include "main_dialog.h"
+#include "ourgl.h"
 
+#include <QGLWidget>
 #include <QPainter>
 #include <QPushButton>
 #include <QString>
@@ -23,6 +25,7 @@ OurDialog::OurDialog(QWidget *parent, Qt::WindowFlags flags) :
   connect(pbStart, SIGNAL(pressed()), this, SLOT(start_timer()));
   connect(pbStop, SIGNAL(pressed()), this, SLOT(stop_timer()));
   
+  vlGL -> addWidget(new OurGl(this));
 }
 
 void

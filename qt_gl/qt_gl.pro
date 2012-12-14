@@ -6,8 +6,9 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += .
 INCLUDEPATH += .
+QT += opengl
 
 # Input
-HEADERS += main_dialog.h
 FORMS += md.ui
-SOURCES += main.cpp main_dialog.cpp
+HEADERS += main_dialog.h ourgl.h
+SOURCES += main.cpp main_dialog.cpp ourgl.cpp

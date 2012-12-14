@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>625</width>
+    <height>499</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>250</y>
+     <x>430</x>
+     <y>450</y>
      <width>171</width>
      <height>32</height>
     </rect>
@@ -54,6 +54,17 @@
    <property name="text">
     <string>Stop</string>
    </property>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>20</y>
+     <width>481</width>
+     <height>421</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="vlGL"/>
   </widget>
  </widget>
  <resources/>
