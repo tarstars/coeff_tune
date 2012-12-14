@@ -12,24 +12,17 @@ using namespace std;
 
 OurDialog::OurDialog(QWidget *parent, Qt::WindowFlags flags) :
   QDialog(parent, flags) {
+
+  setupUi(this);
+
   ourTimer = new QTimer(this);
   connect(ourTimer, SIGNAL(timeout()), this, SLOT(update()));
-
   ourTimer -> start(100);
   ourTimer -> stop();
-
-  QVBoxLayout *pvbl = new QVBoxLayout(this);
-
-  pButtonStart = new QPushButton("Start!",this);
-  pButtonStop = new QPushButton("Stop!",this);
-
-  pvbl -> addWidget(pButtonStart);
-  pvbl -> addWidget(pButtonStop);
-
-  resize(300, 300);
-
-  connect(pButtonStart, SIGNAL(pressed()), this, SLOT(start_timer()));
-  connect(pButtonStop, SIGNAL(pressed()), this, SLOT(stop_timer()));
+  
+  connect(pbStart, SIGNAL(pressed()), this, SLOT(start_timer()));
+  connect(pbStop, SIGNAL(pressed()), this, SLOT(stop_timer()));
+  
 }
 
 void
