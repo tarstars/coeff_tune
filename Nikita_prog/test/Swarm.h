@@ -8,27 +8,33 @@
 #include"stdio.h"
 #include <stdlib.h>
 #include <time.h>
+#include <QFile>
+#include <QString>
+#include <QTextStream>
 
 class bees
 {
 private:
 	
-	bees(){printf("hello params\n");};
+	bees(){printf("hello bee\n");};
+	
 public:
 	double inert, conf, trust;
 	std::vector<double> coord;
 	std::vector<double> speed;
-	std::vector<double> memory;
+	std::vector<double> memory_place;
+	double value,memory_value;
 	
 
-	bees(const std::vector<double> & in):inert(1), conf(1), trust(1),coord(in),speed(coord.size(),0){};
+	bees(unsigned int N,double x):inert(1), conf(1), trust(1),coord(N,x),speed(N,0),memory_place(N,x),value(0),memory_value(0){};
+	bees(const std::vector<double> & in):inert(1), conf(1), trust(1),coord(in),speed(coord.size(),0),memory_place(in),value(0),memory_value(0){};
 	bees(const std::vector<double> &,const std::vector<double> &);
 	bees(const bees &,const bees &);
 	virtual void random(const std::vector<double> &,const std::vector<double> &);
 	
 	virtual unsigned int size() const{return coord.size();};
 	virtual void move(std::vector<double>);
-	virtual void show(char* c=0);
+	virtual void show(char* c="");
 	
 };
 
@@ -45,9 +51,9 @@ public:
 	
 	functional(const std::vector<double> &,const std::vector<double> &);
 	
-	virtual int check(bees *p);
+	virtual double check(bees *p);
 	
-	virtual void show(char* c=0);
+	virtual void show(char* c="");
 };
 
 class swarm
@@ -56,15 +62,27 @@ private:
 	swarm();
 	swarm(const swarm &);
 	swarm &operator = (const swarm &);
+	
+	
+	
+	//std::map<double,unsigned int> distance;
 public:
-	bees best;
-	int population;
+	bees bestBee,center;
+	unsigned int population;
 	functional *problem;
 	std::vector<bees*> Bee;
+//	std::vector<double> value;
+	QFile *file;
+	QTextStream textOut;
 	
-	swarm(int, functional *);
-	bees* calculate();
-	virtual void show(char* c=0);
+	
+	swarm(unsigned int, functional *);
+	~swarm(){file->close();}
+	void communicate();
+	void move();
+	bees* fly(int N=15);
+	virtual void show(char* c="");
+	
 };
 
 /*

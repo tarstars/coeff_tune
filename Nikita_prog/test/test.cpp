@@ -34,9 +34,12 @@ problem.show("problem ");
 
 
 swarm hive(10,&problem);
-/*hive.show("Hive\n");
+hive.show("Hive");
+hive.communicate();
+hive.move();
+hive.show("moved Hive");
+hive.fly();
 
-*/
 
 return 0;
 }
