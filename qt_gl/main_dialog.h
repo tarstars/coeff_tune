@@ -7,15 +7,14 @@ class QPushButton;
 class QPaintEvent;
 class QTimer;
 
-class OurDialog : public QDialog {
+#include "ui_md.h"
+
+class OurDialog : public QDialog, public Ui::mainDialog {
   Q_OBJECT
 
-    public:
+public:
 
   QTimer *ourTimer;
-  QPushButton *pButtonStart;
-  QPushButton *pButtonStop;
-
   OurDialog(QWidget * parent = 0, Qt::WindowFlags = 0);
   
  protected:
