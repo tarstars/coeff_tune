@@ -26,52 +26,83 @@
 	morecomment=[l][\color{magenta}]{\#}
 }
 
-%\begin{document}
-%	\title{Рассказ о спецкурсе "Численные методы в приложении к задачам акустооптики и акустоэлектроники на языке программирования С++"}
-%	\author{...} 
-%	\date{\today}
 
 \begin{document}
-\title{Отчёт о ведении спецкурса по C++ для девочек :-) в 2012 году}
-\author{Арсений Трушин \texttrademark \& \({}^{Co}\)} 
+\title[Численные методы акустооптики на C++]{Отчёт о ведении спецкурса \\"Численные методы в приложении к задачам акустооптики и акустоэлектроники на языке программирования С++" в 2012 году}
+\author{Арсений Трушин\texttrademark \& \(Co\)} 
 \date{\today}
 
-	%	Пример листинга на C++, отступы, включая отступы от начала строки сохраняются (!)
-	\defverbatim[colored]\lst{
-	\begin{lstlisting}[tabsize=2,basicstyle=\ttfamily]
-	const char *processing() const{
-		somestring = "-1";
-	}
-	\end{lstlisting}}
+%% %	Пример листинга на C++, отступы, включая отступы от начала строки сохраняются (!)
+%% \defverbatim[colored]\lst{
+%%   \begin{lstlisting}[tabsize=2,basicstyle=\ttfamily]
+%%     const char *processing() const{
+%%       somestring = "-1";
+%%     }
+%% \end{lstlisting}}
 
-	%	Слайд-заголовок (#1)
-	\frame{\titlepage}
-	%	Слайд с содержанием презентации (#2)
-	\frame{\frametitle{Содержание}\tableofcontents} 
+%% %	Вставка листинга на C++
+%% \frametitle{Пример кода на C++}
+%% \lst
 
-	\section{Инструментарий}
-		\subsection{C++}
-		\frame{
-			%	Вставка листинга на C++
-			\frametitle{Пример кода на C++}
-			\lst
-		}
-		\subsection{Qt}\frame{}
-		\subsection{g++/mingw, emacs, git}\frame{}
-		\subsection{PovRay}\frame{}
-	
-	\section{Постановка задачи}
-	\frame{
-		\frametitle{...}
-		When I find my code in tons of trouble,\\
-		Friends and colleagues come to me,\\
-		Speaking words of wisdom:\\
-		"Write in C."
-	}
-		\subsection{Уравнения Кристоффеля}
-		\subsection{Экстракция экспериментальных данных}
-		\subsection{???}
-		\subsection{PROFIT!}
+%	Слайд-заголовок (#1)
+\frame{\titlepage}
+%	Слайд с содержанием презентации (#2)
+\frame{\frametitle{Содержание}\tableofcontents} 
+
+\section{Обзор. Цели и методы спецкурса.}
+%\subsection{Проблема}
+\frame{
+  \frametitle{Преподавание программирования на Физфаке}
+  \begin{block}{Первые курсы}
+    \begin{itemize}
+    \item На первых курсах есть C++
+    \item Рассказывают о Win32API
+    \item Не рассказывают о STL
+    \end{itemize}
+  \end{block}
+  \begin{block}{В рамках спецкурса}
+    \begin{itemize}
+    \item Решение практических задач
+    \item ``Точки входа'' в полезные технологии
+    \item Решения в ``две строчки''
+    \end{itemize}
+  \end{block}
+}
+%
+\frame{
+  \frametitle{Особенности спецкурса}
+  \begin{block}{Организационные}
+    \begin{itemize}
+    \item Маленькая группа - адаптивность
+    \item Нацеленность на актуальные задачи
+    \end{itemize}
+  \end{block}
+%
+  \begin{block}{Технологии}
+    \begin{itemize}
+      \item g++/mingw
+      \item emacs
+      \item git
+    \end{itemize}
+  \end{block}
+}
+%
+\subsection{}\frame{}
+%
+\subsection{PovRay}\frame{}
+%
+\section{Постановка задачи}
+\frame{
+  \frametitle{...}
+  When I find my code in tons of trouble,\\
+  Friends and colleagues come to me,\\
+  Speaking words of wisdom:\\
+  "Write in C."
+}
+\subsection{Уравнения Кристоффеля}
+\subsection{Экстракция экспериментальных данных}
+\subsection{???}
+\subsection{PROFIT!}
 
 %Мобилограмма
 % Tools:
