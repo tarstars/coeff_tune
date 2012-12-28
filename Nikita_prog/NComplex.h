@@ -15,7 +15,7 @@
 	inline double sqr(double a){return a*a;}
 	inline double max(double x,double y){if(x>y)return x;else return y;}
 	inline double min(double x,double y){if(x>y)return y;else return x;}
-	inline double sign(double x){double ret=0;if(x>0)return 1;if(x<0)return -1;return 0;}
+	inline double sign(double x){if(x>0)return 1;if(x<0)return -1;return 0;}
 
 //class test{public: test(){};virtual double abs(double n){return 0;};};
 

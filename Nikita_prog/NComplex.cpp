@@ -14,7 +14,7 @@ double Ncomplex::arg(double N){//in -PI;PI
 					else return (2*P+atan(y/x))/N;
 		};
 double Ncomplex::arg2(double N){//in 0;2PI
-				if(x==0)if(y>0)return PI/2/N; else if(y<0)return 3*PI/2/N; else return 0;
+				if(x==0){if(y>0)return PI/2/N; else if(y<0)return 3*PI/2/N;} else return 0;
 					if (x>0)
 			if (y>0)return atan(y/x)/N;else return 2*PI/N+atan(y/x)/N;
 					else
