@@ -98,7 +98,7 @@ Nvector solve3(double a,double b,double c)
   double c3phi = - 4 * q / (A * A * A);
  
   double phi = acos(c3phi) / 3;
-if(c3phi>=1)phi=0;  
+//if(abs(c3phi)>1) {Nvector r2(1,0);r2(1)=c3phi;return r2;}
  
   ret(1)= A * cos(phi) - a / 3;
   ret(2) = A * cos(phi +2.094395103) - a / 3;
