@@ -1,4 +1,6 @@
 \documentclass{beamer}
+\usepackage{hyperref}
+\hypersetup{unicode=true}
 \usepackage[utf8x]{inputenc}
 \usepackage[english,russian]{babel}
 \usepackage{beamerthemesplit}
@@ -50,7 +52,7 @@
 \frame{\frametitle{Содержание}\tableofcontents} 
 
 \section{Обзор. Цели и методы спецкурса.}
-%\subsection{Проблема}
+\subsection{Проблема}
 \frame{
   \frametitle{Преподавание программирования на Физфаке}
   \begin{block}{Первые курсы}
@@ -69,6 +71,7 @@
   \end{block}
 }
 %
+\subsection{Предлагаемое решение}
 \frame{
   \frametitle{Особенности спецкурса}
   \begin{block}{Организационные}
@@ -83,26 +86,60 @@
       \item g++/mingw
       \item emacs
       \item git
+      \item povray
     \end{itemize}
   \end{block}
 }
 %
-\subsection{}\frame{}
-%
-\subsection{PovRay}\frame{}
-%
-\section{Постановка задачи}
+\section{Рассмотренные задачи и инструменты}
+\subsection{Подбор констант для кристалла ниобата лития}
+\subsubsection{Уравнения Кристоффеля для ниобата лития}
 \frame{
-  \frametitle{...}
-  When I find my code in tons of trouble,\\
-  Friends and colleagues come to me,\\
-  Speaking words of wisdom:\\
-  "Write in C."
+  \frametitle{Уравнения эластодинамики для пьезоэлектрика}
+  \(\Gamma = \Sigma\)
+  
+  Полина
 }
-\subsection{Уравнения Кристоффеля}
-\subsection{Экстракция экспериментальных данных}
-\subsection{???}
-\subsection{PROFIT!}
+%
+\subsubsection{Использование PovRay для визуализации результатов расчёта}
+\frame{ 
+  \frametitle{Поверхность медленности ниобата лития}
+  Никита
+}
+%
+\subsubsection{Экстракция экспериментальных данных}
+\frame{
+  \frametitle{Проблемы извлечения данных}
+  Юра
+}
+%
+\subsubsection{Метод отжига}
+\frame{
+  \frametitle{Метод отжига}
+  Юра
+}
+%
+\subsubsection{Рой}
+\frame{
+  \frametitle{Рой}
+  Никита
+}
+\subsection{PovRay}
+\frame{
+  Уже говорилось, что PovRay - это удобный инструмент для визуализиции результатов расчёта, кроме того, он позволяет делать 
+  трёхмерные иллюстрации и мультфильмы. Пример кода и что из него получается.
+  
+  Полина
+}
+\subsection{Дифракция методом Фурье}
+\frame{ 
+  \frametitle{Дифракция на щели}
+  
+  Решение задачи о дифракции света на щели с использованием двумерного преобразования Фурье
+  
+  Дима
+}
+%
 
 %Мобилограмма
 % Tools:
@@ -120,11 +157,11 @@
 % - отжиг (С)
 % - дифракция (Д)
 
-\section{Подбор констант}
-	\subsection{Метод отжига}\frame{}
-	\subsection{Градиентный спуск}\frame{}
-	\subsection{``Рой''}\frame{}
-	
+%\section{Подбор констант}
+%\subsection{Метод отжига}\frame{}
+%\subsection{Градиентный спуск}\frame{}
+%\subsection{``Рой''}\frame{}
+
 %\frame{
 %\subsection{сПиСоК}
 %\frame{\frametitle{unnumbered lists}
