@@ -4,6 +4,8 @@
 \usepackage[utf8x]{inputenc}
 \usepackage[english,russian]{babel}
 \usepackage{beamerthemesplit}
+\graphicspath{{pics/}}
+
 
 \usepackage{color}
 \definecolor{gray}{rgb}{0.4,0.4,0.4}
@@ -94,12 +96,42 @@
 \section{Рассмотренные задачи и инструменты}
 \subsection{Подбор констант для кристалла ниобата лития}
 \subsubsection{Уравнения Кристоффеля для ниобата лития}
-\frame{
-  \frametitle{Уравнения эластодинамики для пьезоэлектрика}
-  \(\Gamma = \Sigma\)
-  
-  Полина
-}
+
+\begin{frame}{Уравнения эластодинамики для пьезоэлектрика}
+	
+\begin{columns}
+\column{7 cm}
+	\begin{block}{Уравнения Кристоффеля:}
+
+\ $\Gamma_{il} p_l = \rho V^2 p_i$\\
+
+\ $\Gamma_{il} = \bar{c}_{ijkl} n_j n_k$ -- компоненты тензора Кристоффеля
+
+\ $\lambda=\rho V^2$
+
+  \end{block}
+	
+  \begin{block}{Пьезоэффект:}
+	
+\ $\bar{c}_{ijkl} = c_{ijkl}^E + (e_{pij} n_{p}) (e_{qhl} n_{q}) / \epsilon_{jk}^S n_{j} n_{k}$
+
+\ $e_{pij}, e_{qhl}$ -- пьезоэлектрические модули
+
+\ $\epsilon_{jk}^S$ -- диэлектрическая проницаемость
+
+  \end{block}
+	
+\column{5 cm}
+	
+\begin{figure}
+
+\includegraphics[width=5 cm]{linbo3_piezo.png}
+
+\end{figure}
+
+\end{columns}
+\end{frame}
+
 %
 \subsubsection{Использование PovRay для визуализации результатов расчёта}
 \frame{ 
