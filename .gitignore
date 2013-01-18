@@ -10,3 +10,12 @@ tmp/
 debug/
 release/
 Makefile
+*.aux
+*.bbl
+*.blg
+*.nav
+*.out
+*.pdf
+*.snm
+*.toc
+*.ini
