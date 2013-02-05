@@ -133,12 +133,6 @@
 \end{frame}
 
 %
-\subsubsection{Использование PovRay для визуализации результатов расчёта}
-\frame{ 
-  \frametitle{Поверхность медленности ниобата лития}
-  Никита
-}
-%
 \subsubsection{Экстракция экспериментальных данных}
 \frame{
   \frametitle{Проблемы извлечения данных}
@@ -211,8 +205,6 @@
     \end{figure}
   \end{columns}
 
-
-
 }
 %
 \subsubsection{Рой}
@@ -221,12 +213,74 @@
   Никита
 }
 \subsection{PovRay}
-\frame{
-  Уже говорилось, что PovRay - это удобный инструмент для визуализиции результатов расчёта, кроме того, он позволяет делать 
-  трёхмерные иллюстрации и мультфильмы. Пример кода и что из него получается.
+\begin{frame}[fragile]
+\frametitle{Пример кода}
+
+\begin{columns}
+	\begin{column}{8cm}
+	\begin{verbatim}
+		background {color <1,1,1>}
+		camera {
+		location <3,3,3>
+		look_at <0,0,0>
+		angle 35}
+
+		light_source {<10,10,10> color <1,1,1>}
+		light_source {<5,10,5> color <1,1,1>}
+		
+		sphere {<0,0,0>, 1 pigment {color <0.8,0.3,0.7>}}
+		cylinder {<1,0,0>,<1,0,0.5>, 0.15  pigment {color <0,0,1>}}     
+		box {<0,-0.3,0.8>, < 0.4,0.1,1.2> pigment {color <0.7,0.6,0.5>}} 
+
+	\end{verbatim}
+	\end{column}
+	\begin{column}{4.5cm}
+		\raisebox{80pt}{
+		\includegraphics[width=5 cm]{moon_2.png}}
+	\end{column}
+\end{columns}
+	
+  %Уже говорилось, что PovRay - это удобный инструмент для визуализиции результатов расчёта, кроме того, он позволяет делать трёхмерные иллюстрации и мультфильмы.
   
-  Полина
+\end{frame}
+\frame{
+\frametitle{Наложение текстур}
+\begin{columns}
+	\begin{column}{4cm}	
+		\includegraphics[width=4 cm]{moon_candy.png}
+	\end{column}
+	\begin{column}{4cm}	
+		\includegraphics[width=4 cm]{moon_Blood_Sky.png}
+	\end{column}
+	\begin{column}{4cm}	
+		\includegraphics[width=4 cm]{moon_Brown_Agate.png}
+	\end{column}
+\end{columns}
 }
+
+\frame{
+\frametitle{Луна}
+	\begin{center}
+		\includegraphics[width=9 cm]{moon_0.png}
+	\end{center}
+}
+
+\frame{ 
+  \frametitle{Использование PovRay для визуализации результатов расчёта}
+
+\begin{columns}
+	\begin{column}{4cm}	
+		\includegraphics[width=4 cm]{slow_linbo3_0.png}
+	\end{column}
+	\begin{column}{4cm}	
+		\includegraphics[width=4 cm]{slow_linbo3_1.png}
+	\end{column}
+	\begin{column}{4cm}
+		\includegraphics[width=4 cm]{slow_linbo3_2.png}
+	\end{column}
+\end{columns}
+}
+
 \subsection{Дифракция методом Фурье}
 \frame{ 
   \frametitle{Дифракция на щели}
