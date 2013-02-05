@@ -142,13 +142,67 @@
 \subsubsection{Экстракция экспериментальных данных}
 \frame{
   \frametitle{Проблемы извлечения данных}
-  Юра
+  \begin{columns}
+    \column{6 cm}
+    \begin{figure}
+      \includegraphics[width = 6cm]{table_example.png}
+    \end{figure}
+    \column{7 cm}
+    \begin{table}
+      \begin{tabular}{ c  c  c  c }
+        \hline 
+        \theta \textbackslash \varphi & 30.0 & 35.0 & 40.0 \\
+        \hline
+        0.0  & 3572.95 & 3572.95 & 3572.95 \\
+        5.0  & 3529.54 & 3529.78 & 3530.48 \\
+        10.0 & 3493.69 & 3494.81 & 3497.54 \\
+        15.0 & 3467.32 & 3469.34 & 3475.31 \\
+        \hline
+      \end{tabular}
+    \end{table}
+  \end{columns}
+  Здесь должна быть ссылка на литературу
 }
+\frame{
+  \frametitle{Проблемы извлечения данных}
+   \begin{block}{Шаги подготовки данных}
+    \begin{itemize}
+      \item Перевод данных из графического в тестовый вид \\ {\hspace{6 cm} \footnotesize{OCR программы}}
+
+      \item Считывание данных из txt в основную программу
+
+      \item Устранение ошибок распознавания \\ {\hspace{6 cm} \footnotesize{B542,\% $\rightarrow$ 8542.96}}
+
+      \item Поиск численных ошибок по величине невязки \\ {\hspace{6 cm} \footnotesize{8542.96 $\rightarrow$ 3542.96}}
+    \end{itemize}
+  \end{block}
+}
+
 %
 \subsubsection{Метод отжига}
 \frame{
   \frametitle{Метод отжига}
-  Юра
+  \begin{block}{Начальные условия}
+    \begin{itemize}
+      \item Начальный набор констант $\{c^0_{ijkl}\}, \{e^0_{pij}\}, \{\epsilon^0_{jk}\}$ из Кушибики
+      \item Экспериментальные значения скоростей $V_i(\phi, \theta)$ Книжка 
+    \end{itemize}
+  \end{block}
+  \begin{block}{Хотим}
+    \begin{itemize}
+      \item Получить набор констант $\{c_{ijkl}\}, \{e_{pij}\}, \{\epsilon_{jk}\}$ дающий скорости максимально близкие к экспериментальным
+    \end{itemize}
+  \end{block}
+}
+\frame{
+  \frametitle{Метод отжига}
+  \begin{block}{Алгоритм}
+    \begin{itemize}
+      \item Запускаем программу
+      \item ????????? 
+      \item PROFIT
+    \end{itemize}
+  \end{block}
 }
 %
 \subsubsection{Рой}
