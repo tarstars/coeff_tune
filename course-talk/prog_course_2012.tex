@@ -151,7 +151,7 @@
     \begin{table}
       \begin{tabular}{ c  c  c  c }
         \hline 
-        \theta \textbackslash \varphi & 30.0 & 35.0 & 40.0 \\
+        \theta \backslash \varphi & 30.0 & 35.0 & 40.0 \\
         \hline
         0.0  & 3572.95 & 3572.95 & 3572.95 \\
         5.0  & 3529.54 & 3529.78 & 3530.48 \\
@@ -196,13 +196,23 @@
 }
 \frame{
   \frametitle{Метод отжига}
-  \begin{block}{Алгоритм}
-    \begin{itemize}
-      \item Запускаем программу
-      \item ????????? 
-      \item PROFIT
-    \end{itemize}
-  \end{block}
+  \begin{columns}
+    \column{7 cm}
+      \begin{itemize}
+      \item Случайно выбираем параметр из $\{c^0_{ijkl}\}, \{e^0_{pij}\}, \{\epsilon^0_{jk}\}$, изменяем его на $\delta(T)$, расчитываем текущие скорости
+      \item Считаем невязку текущих и экспериментальных скоростей $\Delta^{curr}$
+      \item Если $\exp(-\frac{\Delta^{curr}-\Delta^{best}}{T}) > rand() \Rightarrow$ запоминаем текущие параметры как лучшие
+%$\Delta^{curr} \rightarrow \Delta^{best}$; $V^{curr} \rightarrow V^$
+      \item Повторяем пока не получим желаемый $\Delta^{best}$
+      \end{itemize}
+    \column{5 cm}
+    \begin{figure}
+      \includegraphics[width = 5cm]{exponent.png}
+    \end{figure}
+  \end{columns}
+
+
+
 }
 %
 \subsubsection{Рой}
