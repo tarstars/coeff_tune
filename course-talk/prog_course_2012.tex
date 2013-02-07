@@ -243,20 +243,32 @@
   %Уже говорилось, что PovRay - это удобный инструмент для визуализиции результатов расчёта, кроме того, он позволяет делать трёхмерные иллюстрации и мультфильмы.
   
 \end{frame}
-\frame{
+
+\begin{frame}[fragile]
 \frametitle{Наложение текстур}
+\begin{verbatim}
+#include "textures.inc"
+sphere { <0,0,0>, 1 
+			  pigment {color <0.8,0.3,0>} texture{name_texture}}
+\end{verbatim}
 \begin{columns}
 	\begin{column}{4cm}	
 		\includegraphics[width=4 cm]{moon_candy.png}
+		\center
+		\\Candy \_ Cane
 	\end{column}
 	\begin{column}{4cm}	
 		\includegraphics[width=4 cm]{moon_Blood_Sky.png}
+		\center
+		\\Blood \_ Sky
 	\end{column}
 	\begin{column}{4cm}	
 		\includegraphics[width=4 cm]{moon_Brown_Agate.png}
+		\center
+		\\Brown \_ Agate
 	\end{column}
 \end{columns}
-}
+\end{frame}
 
 \frame{
 \frametitle{Луна}
