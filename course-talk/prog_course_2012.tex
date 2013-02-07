@@ -170,7 +170,7 @@
     
 {\scriptsize 
 \vspace*{\baselineskip}
-[1] K.K. Wong "Properties of Lithium Niobate", INSPEC, London, 2002}
+[1] K.K. Wong, Properties of Lithium Niobate, INSPEC, London, 2002}
 \vspace*{\baselineskip}
 }
 \frame{
@@ -211,7 +211,7 @@
       \begin{itemize}
       \item Случайно выбираем параметр из $\{c^0_{ijkl}\}, \{e^0_{pij}\}, \{\epsilon^0_{jk}\}$, изменяем его на $\delta(T)$, расчитываем текущие скорости
       \item Считаем невязку текущих и экспериментальных скоростей $\Delta^{curr}$
-      \item Если $\exp(-\frac{\Delta^{curr}-\Delta^{best}}{T}) > rand() \Rightarrow$ запоминаем текущие параметры как лучшие
+      \item Если $\exp(-\frac{\Delta^{curr}-\Delta^{best}}{T}) > rand[0,1] \Rightarrow$ запоминаем текущие параметры как лучшие
 %$\Delta^{curr} \rightarrow \Delta^{best}$; $V^{curr} \rightarrow V^$
       \item Повторяем пока не получим желаемый $\Delta^{best}$
       \end{itemize}
@@ -231,18 +231,18 @@
   Никита
 }
 
+{
 \frame{
   \frametitle{Сравнение результатов}
-{\scriptsize 
-
+  \scriptsize 
   \begin{table}
     \centering
-    \begin{tabular}{ l  c  c  c  с  с  с  с }
-     \multicolumn{8}{c}{Константы упругости, [$\cross 10^{10}$ Н/м$^2$]} \\
-     \hline
-      Источник & $c_{11}$ & $c_{12}$ & $c_{13}$ & $c_{14}$ & $c_{33}$ & $c_{44}$ & $c_{66}$ \\
+    \begin{tabular}{l c c c c c c c}
+      \multicolumn{8}{c}{Константы упругости, [$\times 10^{10}$ Н/м$^2$]} \\
       \hline
-      Ворнер [2] & 20,3~~~ & 5,3~~~ & 7,5~~~ & 0,9~~~ & 24,5~~~ & 6,0~~~ & 7,5~~~ \\
+      & $c_{11}$ & $c_{12}$ & $c_{13}$ & $c_{14}$ & $c_{33}$ & $c_{44}$ & $c_{66}$ \\
+      \hline
+      Ворнер [2] & 20,3$~~~$ & 5,3$~~~$ & 7,5$~~~$ & 0,9$~~~$ & 24,5$~~~$ & 6,0$~~~$ & 7,5$~~~$ \\
       Кушибики [3]  & 19,886 & 5,467 & 6,799 & 0,783 & 23,418 & 5,985 & 7,209 \\
       Кондратьев & --- & --- & --- & --- & --- & --- & --- \\
       Терехов  & 20,377 & 5,774 & 7,535 & 0,852 & 24,314 & 5,980 & 7,308 \\
@@ -250,44 +250,43 @@
       \hline
     \end{tabular}
   \end{table}
-\begin{columns}
-\column{7cm}
-  \begin{table}
-    \begin{tabular}{ l  c  c  c  c }
-    \multicolumn{5}{c}{Пьезоэлектрические константы, [Кл/м$^2$]} \\
-      \hline 
-      Источник & $e_{15}$ & $e_{22}$ & $e_{31}$ & $e_{33}$  \\
-      \hline
-      Ворнер [2] & 3,7~~~ & 2,5~~~ & 0,2~~~ & 1,3~~~ \\
-      Кушибики [3] & 3,655 & 2,407 & 0,328 & 1,874  \\
-      Кондратьев & --- & --- & --- & --- \\
-      Терехов  & 3,900 & 2,529 & 0,252 & 1,378  \\
-      Трушин & 3,954 & 2,560 & 0,242 & 1,373  \\
-      \hline
-    \end{tabular}
-  \end{table}
-\column{5cm}
-  \begin{table}
-    \begin{tabular}{ l  c  c }
-    \multicolumn{3}{c}{Диэлектрические константы} \\
-      \hline 
-      Источник & $\varepsilon_{11}/\varepsilon_{0}$ & $\varepsilon_{33}/\varepsilon_{0}$  \\
-      \hline
-      Ворнер [2] & 44~~ & 29~~  \\
-      Кушибики [3] & 44,9 & 26,7   \\
-      Кондратьев & --- & --- \\
-      Терехов  & 47,7 & 30,2   \\
-      Трушин & 48,9 & 30,6   \\
-      \hline
-    \end{tabular}
-  \end{table}
-\end{columns}
+  \begin{columns}
+    \column{7cm}
+    \begin{table}
+      \begin{tabular}{l c c c c}
+        \multicolumn{5}{c}{Пьезоэлектрические константы, [Кл/м$^2$]} \\
+        \hline 
+        & $e_{15}$ & $e_{22}$ & $e_{31}$ & $e_{33}$  \\
+        \hline
+        Ворнер [2] & 3,7$~~~$ & 2,5$~~~$ & 0,2$~~~$ & 1,3$~~~$ \\
+        Кушибики [3] & 3,655 & 2,407 & 0,328 & 1,874  \\
+        Кондратьев & --- & --- & --- & --- \\
+        Терехов  & 3,900 & 2,529 & 0,252 & 1,378  \\
+        Трушин & 3,954 & 2,560 & 0,242 & 1,373  \\
+        \hline
+      \end{tabular}
+    \end{table}
+    \column{5cm}
+    \begin{table}
+      \begin{tabular}{l c c}
+        \multicolumn{3}{c}{Диэлектрические константы} \\
+        \hline 
+        & $\varepsilon_{11}/\varepsilon_{0}$ & $\varepsilon_{33}/\varepsilon_{0}$  \\
+        \hline
+        Ворнер [2] & 44$~~$ & 29$~~$  \\
+        Кушибики [3] & 44,9 & 26,7   \\
+        Кондратьев & --- & --- \\
+        Терехов  & 47,7 & 30,2   \\
+        Трушин & 48,9 & 30,6   \\
+        \hline
+      \end{tabular}
+    \end{table}
+  \end{columns}
 
-{\scriptsize 
     [2] A.W. Warner {\it{et al.}, J. Acoust. Soc. Amer.}, \textbf{42}, 1967
             
     \vspace*{-0.1cm}
-    [3] J. Kushibiki {\it{et al.}, IEEE Trans. Ultrason., Ferroelect., Freq. Contr.}, \textbf{41}, 1994}
+    [3] J. Kushibiki {\it{et al.}, IEEE Trans. Ultrason., Ferroelect., Freq. Contr.}, \textbf{41}, 1994
     \vspace*{\baselineskip}
 }
 }
@@ -360,17 +359,17 @@ sphere { <0,0,0>, 1
 \begin{columns}
 	\begin{column}{4cm}	
 		\includegraphics[width=4 cm]{moon_candy.png}
-		\center
+		\centering
 		\\Candy\_Cane
 	\end{column}
 	\begin{column}{4cm}	
 		\includegraphics[width=4 cm]{moon_Blood_Sky.png}
-		\center
+		\centering
 		\\Blood\_Sky
 	\end{column}
 	\begin{column}{4cm}	
 		\includegraphics[width=4 cm]{moon_Brown_Agate.png}
-		\center
+		\centering
 		\\Brown\_Agate
 	\end{column}
 \end{columns}
