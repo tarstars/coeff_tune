@@ -7,6 +7,17 @@
 \graphicspath{{pics/}}
 
 
+
+% блок для добавления значка зергов
+\usepackage[absolute,verbose,overlay]{textpos}
+\newcommand{\zerglogo}{% 
+  \setlength{\TPHorizModule}{11.8 cm} 
+  \setlength{\TPVertModule}{1.1 cm} 
+  \begin{textblock}{1}(1,1) 
+   \includegraphics[height = 9 mm]{zerg.png} 
+  \end{textblock}}
+
+
 \usepackage{color}
 \definecolor{gray}{rgb}{0.4,0.4,0.4}
 \definecolor{bggray}{rgb}{0.9,0.9,0.9}
@@ -145,7 +156,7 @@
     \begin{table}
       \begin{tabular}{ c  c  c  c }
         \hline 
-        \theta \backslash \varphi & 30.0 & 35.0 & 40.0 \\
+        $\theta \backslash \varphi$ & 30.0 & 35.0 & 40.0 \\
         \hline
         0.0  & 3572.95 & 3572.95 & 3572.95 \\
         5.0  & 3529.54 & 3529.78 & 3530.48 \\
@@ -210,6 +221,8 @@
 \subsubsection{Рой}
 \frame{
   \frametitle{Рой}
+  \zerglogo
+
   Никита
 }
 \subsection{PovRay}
