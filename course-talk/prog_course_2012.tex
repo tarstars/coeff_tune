@@ -7,6 +7,17 @@
 \graphicspath{{pics/}}
 
 
+
+% блок для добавления значка зергов
+\usepackage[absolute,verbose,overlay]{textpos}
+\newcommand{\zerglogo}{% 
+  \setlength{\TPHorizModule}{11.8 cm} 
+  \setlength{\TPVertModule}{1.1 cm} 
+  \begin{textblock}{1}(1,1) 
+   \includegraphics[height = 9 mm]{zerg.png} 
+  \end{textblock}}
+
+
 \usepackage{color}
 \definecolor{gray}{rgb}{0.4,0.4,0.4}
 \definecolor{bggray}{rgb}{0.9,0.9,0.9}
@@ -210,6 +221,8 @@
 \subsubsection{Рой}
 \frame{
   \frametitle{Рой}
+  \zerglogo
+
   Никита
 }
 \subsection{PovRay}
