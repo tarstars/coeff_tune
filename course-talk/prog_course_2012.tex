@@ -21,6 +21,9 @@
 \usepackage{color}
 \definecolor{gray}{rgb}{0.4,0.4,0.4}
 \definecolor{bggray}{rgb}{0.9,0.9,0.9}
+\definecolor{red}{rgb}{1,0,0}
+\definecolor{black}{rgb}{0,0,0}
+\definecolor{darkgreen}{rgb}{0, 0.5, 0}
 %	Параметры подсветки исходного кода на C++
 \usepackage{listings}
 \lstset{breakatwhitespace,
@@ -58,6 +61,27 @@
 %% %	Вставка листинга на C++
 %% \frametitle{Пример кода на C++}
 %% \lst
+
+\defverbatim[colored]\dflst{
+   \begin{lstlisting}[tabsize=2,basicstyle=\footnotesize\ttfamily]
+  int N = 400;
+  Matrix zeroz(N, N);  // Slit plane (N x N points)
+  Matrix zerozf(N, N); // In k-space
+  
+  Plan to_K(zeroz, zerozf, FFTW_FORWARD, FFTW_ESTIMATE);
+  Plan to_XYZ(zerozf, zeroz, FFTW_BACKWARD, FFTW_ESTIMATE);
+
+  zeroz.fillRect(N/2-10, 0, N/2+10, N-1, 1); // Slit
+  zeroz.saveAsPGM("0.pgm"); // Slit plane image
+  to_K.execute();
+  
+  double lambda = 5e-4;
+  double A = 1;
+  
+  for (int i = 1; i <= 10; ++i) {  
+    zerozf.shiftZ(1, A, lambda); // Moving along Z-axis
+    to_XYZ.execute();
+    zeroz.saveAsPGM(intToString(i) + ".pgm");}\end{lstlisting}}
 
 %	Слайд-заголовок (#1)
 \frame{\titlepage}
@@ -402,12 +426,105 @@ sphere { <0,0,0>, 1
 
 \subsection{Дифракция методом Фурье}
 \frame{ 
-  \frametitle{Дифракция на щели}
+  \frametitle{Дифракция методом Фурье}
   
-  Решение задачи о дифракции света на щели с использованием двумерного преобразования Фурье
-  
-  Дима
+  \center{Решение задачи о дифракции света с использованием  преобразования Фурье}
+  	\vspace{0.2in}
+	\begin{enumerate}
+		\item Задаем распределение интенсивности в плоскости щели
+		\item Переходим к Фурье-образу (разложению на плоские волны)
+		\item Вычисляем фазовый сдвиг для каждого волнового вектора на заданном расстоянии от щели ($\exp^{ik_zz}$)
+		\item Выполняем обратное преобразование Фурье
+	\end{enumerate}
+	
+	  	% equation* suppress auto-numbering
+	\center{\small{Пункты 2-4 эквивалентны вычислению интеграла}}
+  	\begin{equation*}
+  	E(x,y,z)=-{i \over \lambda} \iint_{-\infty}^{+\infty}{ E(x',y',0) \frac{e^{ikr}}{r} \cos \theta}dx'dy'
+  	\end{equation*}
+  	
 }
+
+\frame{ 
+  \frametitle{Библиотека \textcolor{black}{FFT}\textcolor{red}{W}}
+  \includegraphics[height=0.8cm]{pics/fftw-logo.png}
+   \vspace{-0.2in}
+   \center{Особенности:}
+  	\begin{enumerate}
+		\item Одно- и многомерное дискретное преобразование Фурье
+		\item Поддержка многоядерных процессоров
+		\item Портируемость (\small{...to any platform with a C compiler...}), высокая скорость работы
+	\end{enumerate}
+  \vspace{0.1in}
+  \center{Алгоритм использования:}
+  	\begin{enumerate}
+  		\item Создать "план" необходимого преобразования (медленная операция)
+  		\item Используя план, выполнить преобразование Фурье столько раз, сколько необходимо (быстрая операция)
+  	\end{enumerate}
+}
+
+\frame{ 
+  \frametitle{Фрагмент кода}
+  \vspace{-0.1in}
+  \dflst
+}
+
+\frame{ 
+  \frametitle{Иллюстрации}
+\begin{columns}[t]
+\column{.5\textwidth}
+\centering
+\includegraphics[width=4cm,height=4cm]{pics/1slit/0.png}\\
+\includegraphics[width=4cm,height=4cm]{pics/1slit/1.png}
+\column{.5\textwidth}
+\centering
+\includegraphics[width=4cm,height=4cm]{pics/1slit/3.png}\\
+\includegraphics[width=4cm,height=4cm]{pics/1slit/9.png}
+\end{columns}
+}
+
+\frame{ 
+  \frametitle{Иллюстрации}
+\begin{columns}[t]
+\column{.5\textwidth}
+\centering
+\includegraphics[width=4cm,height=4cm]{pics/2slits/0.png}\\
+\includegraphics[width=4cm,height=4cm]{pics/2slits/1.png}
+\column{.5\textwidth}
+\centering
+\includegraphics[width=4cm,height=4cm]{pics/2slits/3.png}\\
+\includegraphics[width=4cm,height=4cm]{pics/2slits/9.png}
+\end{columns}
+}
+
+\frame{ 
+  \frametitle{Иллюстрации}
+\begin{columns}[t]
+\column{.5\textwidth}
+\centering
+\includegraphics[width=4cm,height=4cm]{pics/1square/0.png}\\
+\includegraphics[width=4cm,height=4cm]{pics/1square/1.png}
+\column{.5\textwidth}
+\centering
+\includegraphics[width=4cm,height=4cm]{pics/1square/3.png}\\
+\includegraphics[width=4cm,height=4cm]{pics/1square/7.png}
+\end{columns}
+}
+
+\frame{ 
+  \frametitle{Иллюстрации}
+\begin{columns}[t]
+\column{.5\textwidth}
+\centering
+\includegraphics[width=4cm,height=4cm]{pics/4squares/0.png}\\
+\includegraphics[width=4cm,height=4cm]{pics/4squares/3.png}
+\column{.5\textwidth}
+\centering
+\includegraphics[width=4cm,height=4cm]{pics/4squares/7.png}\\
+\includegraphics[width=4cm,height=4cm]{pics/4squares/9.png}
+\end{columns}
+}
+
 %
 
 %Мобилограмма
